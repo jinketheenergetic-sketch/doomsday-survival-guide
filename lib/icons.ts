@@ -3,16 +3,22 @@ import {
   faBookOpen,
   faElevator,
   faFire,
+  faHandshake,
+  faHardDrive,
   faHouseCrack,
   faKitMedical,
   faMeteor,
   faRobot,
+  faScrewdriverWrench,
+  faServer,
   faSnowflake,
+  faSolarPanel,
   faStairs,
   faStar,
   faSun,
   faTemperatureLow,
   faTowerBroadcast,
+  faUserShield,
   faWater,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -34,6 +40,12 @@ const iconByName: Record<string, IconDefinition> = {
   "temperature-low": faTemperatureLow,
   "tower-broadcast": faTowerBroadcast,
   "kit-medical": faKitMedical,
+  "hard-drive": faHardDrive,
+  "user-shield": faUserShield,
+  "solar-panel": faSolarPanel,
+  server: faServer,
+  handshake: faHandshake,
+  "screwdriver-wrench": faScrewdriverWrench,
 };
 
 export function getIconByName(name: string): IconDefinition {
