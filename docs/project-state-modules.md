@@ -6,7 +6,7 @@
 
 | 路径 | 职责 | 对外暴露 |
 | --- | --- | --- |
-| `app/` | Next.js App Router 页面与布局 | `layout.tsx`（根布局、字体变量、全局 Header/Footer）、`page.tsx`（首页场景大厅：Hero、进度统计、7 场景网格、知识小贴士）、`scenario/[slug]/page.tsx`（场景简报页：双色调封面、威胁等级、技能、专属资源、我的记录、吸底动作条；`generateStaticParams` 预渲染 7 个 slug；无效 slug 调用 `notFound()`）、`play/[slug]/page.tsx`（游戏页：经 `getScenarioContent(slug)` 取内容，无效 slug `notFound()`，`generateStaticParams` 预渲染 7 个场景，渲染 `GameScreen`）、`play/[slug]/result/page.tsx`（结算页占位：预渲染 7 个 slug、无效 slug `notFound()`，显示本局结束提示与返回入口；完整结算由 US-012 落地）、`not-found.tsx`（404 页面：大号 meteor 图标 +「这个末日不存在，但别慌。」+ 回到大厅按钮，沿用全局 Header/Footer 与纸色背景） |
+| `app/` | Next.js App Router 页面与布局 | `layout.tsx`（根布局、字体变量、全局 Header/Footer）、`page.tsx`（首页场景大厅：Hero、进度统计、7 场景网格、知识小贴士）、`scenario/[slug]/page.tsx`（场景简报页：双色调封面、威胁等级、技能、专属资源、我的记录、吸底动作条；`generateStaticParams` 预渲染 7 个 slug；无效 slug 调用 `notFound()`）、`play/[slug]/page.tsx`（游戏页：经 `getScenarioContent(slug)` 取内容，无效 slug `notFound()`，`generateStaticParams` 预渲染 7 个场景，渲染 `GameScreen`）、`play/[slug]/result/page.tsx`（结算页：预渲染 7 个 slug、无效 slug `notFound()`，注入场景结局/知识卡与事件（为空时用占位牌组），渲染 `ResultScreen`）、`not-found.tsx`（404 页面：大号 meteor 图标 +「这个末日不存在，但别慌。」+ 回到大厅按钮，沿用全局 Header/Footer 与纸色背景） |
 | `components/site-header.tsx` | 全局导航（客户端组件）：Logo、场景/生存手册导航、当前路由高亮、音效开关；`usePathname()` 拆进 `HeaderNav` 并由 `<Suspense>` 包裹，fallback 复用无状态的 `NavLinks` | `SiteHeader`（内部 `HeaderNav` / `HeaderNavFallback` / `NavLinks` 不对外导出） |
 | `components/site-footer.tsx` | 全局页脚：科普免责声明与 Unsplash / Font Awesome 署名 | `SiteFooter` |
 | `components/home-stats.tsx` | 首页进度条带（客户端组件）：知识 x/42、结局 x/21、总存活天数、最佳评分 | `HomeStats` |
@@ -23,7 +23,9 @@
 | `components/game/ChoiceResultSheet.tsx` | 选择结果底部弹层（客户端组件）：结果文案、风险成功 / 失败标记、实际资源变化 chip、关联 `knowledgeId` 的知识贴士与「继续」按钮；最终回合提示进入结算页 | `ChoiceResultSheet({ scenario, result, knowledge?, final, onContinue })`、`ChoiceResultSheetProps` |
 | `components/game/resource-chips.tsx` | 资源变化 chip 的共用渲染：把资源变化整理成 chip 数据，正向绿色 / 负向红色，供事件卡预览与结果弹层共用 | `DeltaChipView`、`describeDelta(effects, specificEffect, scenario)`、`DeltaChip({ chip, prefix? })` |
 | `components/game/resource-display.ts` | 5 项通用资源的展示元数据（键、名称、FontAwesome 图标、颜色），供 HUD、事件卡与结果弹层共用 | `CommonResourceDisplay`、`COMMON_RESOURCES` |
-| `app/globals.css` | Tailwind v4 入口 + 设计令牌（颜色、圆角、阴影、动效、7 组场景渐变）+ 结果弹层 `sheet-rise` 与资源数字 `value-pop` 动效类 | CSS 变量与 `@theme inline` 映射出的 Tailwind 工具类、`.sheet-rise`、`.value-pop` |
+| `components/game/ResultScreen.tsx` | 结算页主体（客户端组件）：结局插画（doom 灰暗滤镜 +「你尽力了（大概）」标签）、结局标题/结语/「结局 x/3」、分数滚动与星级点亮、终局资源与存活天数、移动端默认折叠的生存报告（✓/•/✗ + 正确做法）、本次解锁知识卡、再来一局/换个末日/查看生存手册入口；无结果或 slug 不匹配时重定向到场景简报 | `ResultScreen({ scenario, endings, knowledge, events })`、`ResultScreenProps` |
+| `components/game/result-store.ts` | 结算页的一次性会话：`useSyncExternalStore` 快照读取 `lastResult`，首次渲染后调用 `applyRunResult` 写回进度、清空 `activeRun` 与 `lastResult`，并通知订阅者刷新结局收集数 | `ResultSnapshot`、`getResultSnapshot()`、`getServerResultSnapshot()`、`subscribeResult(listener)`、`applyResultOnce(result)` |
+| `app/globals.css` | Tailwind v4 入口 + 设计令牌（颜色、圆角、阴影、动效、7 组场景渐变）+ 结果弹层 `sheet-rise`、资源数字 `value-pop` 与结算星级 `star-pop` 动效类 | CSS 变量与 `@theme inline` 映射出的 Tailwind 工具类、`.sheet-rise`、`.value-pop`、`.star-pop` |
 | `lib/types.ts` | 领域模型类型与常量（场景、事件、选项、知识卡、结局、本局状态、进度、设置、结算结果）；`RunState.newKnowledgeIds` 记录本局首次解锁的知识卡 | `Scenario`、`GameEvent`、`Choice`、`RiskBranch`、`KnowledgeCard`、`Ending`、`RunState`、`Progress`、`Settings`、`LastResult` 等类型；`SCENARIO_IDS`、`RESOURCE_KEYS` |
 | `lib/storage.ts` | 存档适配器：版本信封、默认值、损坏数据回退、前缀重置；`activeRun` 校验会保留可选的 `newKnowledgeIds` | `StorageAdapter`、`StorageBackend`、`createStorageAdapter(backend?)`、`storageAdapter`、`STORAGE_KEYS`、`STORAGE_PREFIX`、`STORAGE_VERSION`、`createDefaultProgress()`、`createDefaultSettings()` |
 | `lib/use-progress.ts` | 客户端读取进度的 `useSyncExternalStore` hook；服务端快照为空进度，内容不变时复用同一引用 | `useProgress()` |
