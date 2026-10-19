@@ -2,22 +2,18 @@
 
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
-  faBolt,
-  faBrain,
   faChevronDown,
   faChevronUp,
   faDoorOpen,
-  faDroplet,
-  faHeartPulse,
-  faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 
+import { COMMON_RESOURCES } from "@/components/game/resource-display";
 import { RESOURCE_MAX, RUN_DAYS } from "@/lib/engine/constants";
 import { getIconByName } from "@/lib/icons";
-import type { ResourceKey, RunState, Scenario } from "@/lib/types";
+import type { RunState, Scenario } from "@/lib/types";
 
 interface ResourceView {
   key: string;
@@ -27,20 +23,6 @@ interface ResourceView {
   value: number;
   max: number;
 }
-
-/** 5 项通用资源的展示信息（顺序与 `RESOURCE_KEYS` 一致）。 */
-const COMMON_RESOURCES: readonly {
-  key: ResourceKey;
-  label: string;
-  icon: IconDefinition;
-  color: string;
-}[] = [
-  { key: "hp", label: "生命", icon: faHeartPulse, color: "var(--danger)" },
-  { key: "sanity", label: "理智", icon: faBrain, color: "var(--scene-ai-from)" },
-  { key: "water", label: "饮水", icon: faDroplet, color: "var(--scene-flood-from)" },
-  { key: "food", label: "食物", icon: faUtensils, color: "var(--sun)" },
-  { key: "energy", label: "体力", icon: faBolt, color: "var(--coral)" },
-];
 
 function buildResourceViews(
   scenario: Scenario,

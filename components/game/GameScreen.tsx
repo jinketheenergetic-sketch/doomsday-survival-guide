@@ -1,14 +1,13 @@
 "use client";
 
-import { faBolt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useMemo } from "react";
 
+import { EventCard } from "@/components/game/EventCard";
 import { GameHud } from "@/components/game/GameHud";
 import { GameProvider, useGame } from "@/components/game/GameProvider";
 import { createSkeletonEvents } from "@/data/scenarios/skeleton";
 import { buildRun } from "@/lib/engine/deck";
-import type { RunState, ScenarioContent } from "@/lib/types";
+import type { GameEvent, RunState, ScenarioContent } from "@/lib/types";
 
 /**
  * 游戏页客户端外壳。
@@ -35,14 +34,27 @@ export function GameScreen({ content }: { content: ScenarioContent }) {
 
   return (
     <GameProvider resolveRun={resolveRun}>
-      <GameRoom content={content} />
+      <GameRoom content={content} events={playableEvents} />
     </GameProvider>
   );
 }
 
-function GameRoom({ content }: { content: ScenarioContent }) {
+function GameRoom({
+  content,
+  events,
+}: {
+  content: ScenarioContent;
+  events: readonly GameEvent[];
+}) {
   const { state } = useGame();
   const run = state.run;
+
+  // 当前回合的事件 id 由牌组与下标决定。
+  const currentEvent = useMemo(() => {
+    if (!run) return undefined;
+    const eventId = run.deck[run.eventIndex];
+    return events.find((event) => event.id === eventId);
+  }, [events, run]);
 
   // 首次挂载先渲染空态，等 Provider 从 activeRun 恢复或新建后再显示 HUD。
   if (!run) {
@@ -62,46 +74,20 @@ function GameRoom({ content }: { content: ScenarioContent }) {
       <div className="mx-auto w-full max-w-4xl px-4 py-4 sm:px-6 sm:py-6">
         <GameHud scenario={scenario} run={run} />
 
-        <section
-          aria-labelledby="briefing-title"
-          className="mt-4 rounded-card border-2 border-ink bg-surface p-5 shadow-card sm:p-6"
-        >
-          <p className="font-numeric text-xs font-bold tracking-[0.22em] text-ink-soft">
-            SURVIVAL BRIEF · DAY {run.day}
-          </p>
-          <h2
-            id="briefing-title"
-            className="mt-1 font-display text-2xl text-ink"
+        {currentEvent ? (
+          <EventCard
+            scenario={scenario}
+            event={currentEvent}
+            knowledge={content.knowledge}
+          />
+        ) : (
+          <p
+            role="status"
+            className="mt-4 rounded-card border-2 border-ink/15 bg-surface p-5 text-sm font-semibold text-ink-soft"
           >
-            今日简报
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft sm:text-base">
-            {scenario.tagline}
+            今天的事件还没有准备好。
           </p>
-
-          <ul
-            aria-label="可用技能"
-            className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-ink sm:text-sm"
-          >
-            {scenario.skills.map((skill) => (
-              <li
-                key={skill}
-                className="inline-flex min-h-8 items-center gap-1.5 rounded-chip border-2 border-ink/15 bg-paper px-3"
-              >
-                <FontAwesomeIcon
-                  icon={faBolt}
-                  aria-hidden
-                  className="h-3 w-3 text-coral"
-                />
-                {skill}
-              </li>
-            ))}
-          </ul>
-
-          <p className="mt-4 text-xs font-semibold text-ink-soft">
-            已做出 {run.history.length} 个决定
-          </p>
-        </section>
+        )}
       </div>
     </main>
   );

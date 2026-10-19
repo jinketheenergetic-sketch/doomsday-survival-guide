@@ -17,8 +17,10 @@
 | `components/random-scenario-button.tsx` | Hero「随机灾变」按钮（客户端组件）：随机跳转 `/scenario/[slug]` | `RandomScenarioButton` |
 | `components/knowledge-tip.tsx` | 首页知识小贴士（客户端组件）：从已解锁知识卡中选一条链接到 `/codex`，无卡片时显示解锁提示 | `KnowledgeTip` |
 | `components/game/GameProvider.tsx` | 本局状态 Provider（客户端组件）：`useReducer` + Context 暴露 `state` / `dispatch`；挂载后经 `StorageAdapter` 从 `activeRun` 恢复，可用 `resolveRun(stored)` 决定沿用存档还是新建，run 变化时写回；不直接访问 `localStorage` | `GameProvider`（可注入 `adapter` / `resolveRun`）、`useGame()`、`GameContextValue`、`GameProviderProps` |
-| `components/game/GameScreen.tsx` | 游戏页客户端外壳：用 `Date.now()` 种子与 `getScenarioContent` 的事件新建对局（同场景存档则恢复），包装 `GameProvider`；无对局时显示加载态，有对局时渲染 `GameHud` 与今日简报 | `GameScreen({ content })` |
+| `components/game/GameScreen.tsx` | 游戏页客户端外壳：用 `Date.now()` 种子与 `getScenarioContent` 的事件新建对局（同场景存档则恢复），包装 `GameProvider`；无对局时显示加载态，有对局时按 `run.deck[run.eventIndex]` 取当前事件并渲染 `GameHud` 与 `EventCard`，事件缺失时显示占位提示 | `GameScreen({ content })` |
 | `components/game/GameHud.tsx` | 游戏页 HUD（客户端组件）：`第 x/7 天`、7 个天数圆点、5 项通用资源 + 场景专属资源的进度条；移动端收为紧凑图标 + 数字并可展开抽屉；退出按钮弹出确认对话框，确认后返回场景简报且不清除 `activeRun` | `GameHud({ scenario, run })` |
+| `components/game/EventCard.tsx` | 当前回合事件卡（客户端组件）：渐变 + 图标 + CSS 形状的插画区、幕名、标题、正文、默认收起的「冷知识」折叠区、3 个 A/B/C 选项按钮（效果预览 chip，风险选项附成功率与成功/失败分支）与「按 1 / 2 / 3 选择」键盘提示 | `EventCard({ scenario, event, knowledge? })`、`EventCardProps` |
+| `components/game/resource-display.ts` | 5 项通用资源的展示元数据（键、名称、FontAwesome 图标、颜色），供 HUD 与事件卡共用 | `CommonResourceDisplay`、`COMMON_RESOURCES` |
 | `app/globals.css` | Tailwind v4 入口 + 设计令牌（颜色、圆角、阴影、动效、7 组场景渐变） | CSS 变量与 `@theme inline` 映射出的 Tailwind 工具类 |
 | `lib/types.ts` | 领域模型类型与常量（场景、事件、选项、知识卡、结局、本局状态、进度、设置、结算结果） | `Scenario`、`GameEvent`、`Choice`、`RiskBranch`、`KnowledgeCard`、`Ending`、`RunState`、`Progress`、`Settings`、`LastResult` 等类型；`SCENARIO_IDS`、`RESOURCE_KEYS` |
 | `lib/storage.ts` | 存档适配器：版本信封、默认值、损坏数据回退、前缀重置 | `StorageAdapter`、`StorageBackend`、`createStorageAdapter(backend?)`、`storageAdapter`、`STORAGE_KEYS`、`STORAGE_PREFIX`、`STORAGE_VERSION`、`createDefaultProgress()`、`createDefaultSettings()` |
@@ -33,7 +35,7 @@
 | `lib/engine/resolve.ts` | 选项结算引擎：应用确定/风险分支效果、5 项资源钳制 0–100、断水断食扣 HP、HP/理智归零判定死亡；不推进 day/eventIndex | `ChoiceResolution`、`resolveChoice(run, choice, rng)` → `{ state, result }` |
 | `lib/engine/score.ts` | 评分、星级与结局引擎：按最终本局状态计算分数与星级、判定 best/neutral/doom，死亡局最高 1 星 | `RunEvaluation`、`isDead(run)`、`computeScore(run)`、`computeStars(score, dead)`、`resolveEnding(run)`、`evaluateRun(run)` → `{ score, stars, ending, days }` |
 | `data/scenarios/index.ts` | 7 个场景的元数据注册表 | `scenarios`（7 项数组）、`scenarioById`、`getScenario(id)` |
-| `data/scenarios/skeleton.ts` | 内容 story 落地前的占位事件牌组：为任意场景生成 1 开场 + 5 中段 + 1 终局，供游戏页在真实 `events` 为空时生成合法 7 回合对局 | `createSkeletonEvents(scenario)` |
+| `data/scenarios/skeleton.ts` | 内容 story 落地前的占位事件牌组：为任意场景生成 1 开场 + 5 中段 + 1 终局，供游戏页在真实 `events` 为空时生成合法 7 回合对局；选项带示例资源变化与一个风险分支，便于展示效果预览 | `createSkeletonEvents(scenario)` |
 | `data/knowledge/index.ts` | 全局知识卡注册表（当前为空数组，待各场景 knowledge 内容汇总） | `knowledgeCards`、`knowledgeById`、`getKnowledgeCard(id)` |
 | `tests/` | Vitest + jsdom + Testing Library 测试 | `setup.ts`（jest-dom 匹配器）、`home.test.tsx`（mock 了 `next/navigation` 的 `useRouter`）、`scenarios.test.ts`、`storage.test.ts`、`engine-rng.test.ts`、`engine-constants.test.ts`、`engine-deck.test.ts`、`engine-resolve.test.ts`、`engine-score.test.ts`、`progress.test.ts`、`game-reducer.test.ts`、`game-provider.test.tsx`（内存 `StorageBackend` 注入适配器） |
 | `public/` | 静态资源（脚手架默认图标） | 静态文件 |
