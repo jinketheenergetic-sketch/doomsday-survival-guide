@@ -1,6 +1,7 @@
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faBookOpen,
+  faElevator,
   faFire,
   faHouseCrack,
   faKitMedical,
@@ -22,6 +23,7 @@ import {
 const iconByName: Record<string, IconDefinition> = {
   water: faWater,
   "house-crack": faHouseCrack,
+  elevator: faElevator,
   meteor: faMeteor,
   snowflake: faSnowflake,
   robot: faRobot,
