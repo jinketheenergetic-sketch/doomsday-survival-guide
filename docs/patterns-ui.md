@@ -28,3 +28,10 @@
 - **结算页「结局 x/3」的 x = 写回后该场景已解锁结局数** — 不是本次结局在 3 个槽位中的序号（来自 [US-012]）
 - **新增 FontAwesome 图标名先用 `node -e "require('@fortawesome/free-solid-svg-icons')"` 确认导出存在** — 再登记到 `lib/icons.ts`，否则 tsc 报不存在的导出（来自 [US-023]）
 - **URL 状态筛选用 `<Link href="?k=v">` 而非 `router.replace`** — URL 持久化天然成立，测试也不必 mock `useRouter`（来自 [US-013]）
+- **`backdrop-filter` / `backdrop-blur` 会成为 fixed 子元素的包含块** — 弹层不要渲染在带 blur 的 sticky 容器内，否则定位相对容器而非视口（来自 [US-028]）
+- **语义色同时用于背景与浅底文字时用「基础色 + `*-strong` 文字色」双令牌** — 直接调深基础色会牺牲背景的鲜艳度；新增语义色沿用此模式（来自 [US-029]）
+- **`body` 防横向溢出让用 `overflow-x: clip`** — `hidden` 会创建滚动容器并影响 sticky，`clip` 不会（来自 [US-029]）
+- **卡片背景高光用 `isolation: isolate` + `::before` 的 `z-index: -1`** — 稳定压在背景之上、内容之下，不遮文字（来自 [US-030]）
+- **入场动画挂在包裹层而非元素本身** — `animation-fill-mode: both` 会留下 `transform`，覆盖元素自身的 hover 位移（来自 [US-030]）
+- **减少动效规则要同时清零 `animation-delay` / `transition-delay`** — 只改 duration 会让元素先停在 `from` 状态再突变（来自 [US-030]）
+- **换回合重播 CSS 入场动画靠 `key={day}-{eventId}` 重新挂载** — 只换 prop 不会触发动画重播（来自 [US-030]）

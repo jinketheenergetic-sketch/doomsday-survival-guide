@@ -14,3 +14,5 @@
 - **测试里 `import Home from "@/app/page"` 可顺带验证 `@/*` 别名解析** — 别名配置变动时这类测试会先失败（来自 [US-034]）
 - **jsdom 不实现 `window.matchMedia`** — 读取 `prefers-reduced-motion` 前先判空（来自 [US-012]）
 - **标题类断言逐字复制 content-brief** — 中文单引号等标点原样保留，替换引号样式会让测试与简报不一致（来自 [US-023]）
+- **jsdom 没有 `AudioContext`** — 音效测试只能断言「不抛错」与开关持久化，真实发声需在浏览器验证（来自 [US-028]）
+- **自动游玩复用 `gameReducer` 的 create → commitChoice → advance → end** — 不必另写模拟器；多跑几个种子比单一种子更能证明可通关（来自 [US-030b]）

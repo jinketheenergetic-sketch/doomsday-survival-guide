@@ -20,7 +20,7 @@
 - **动态路由页面的 `params` 是 Promise** — Next 16 下类型写 `{ params: Promise<{ slug: string }> }` 并 `await params`（来自 [US-006]）
 - **固定 slug 的动态路由要提供 `generateStaticParams()`** — 只 `await params` 仍会被判为 runtime data，构建报 `blocking-prerender-dynamic`（来自 [US-038]）
 - **`resolveChoice` 与 `commitChoice` 都不推进 `day` / `eventIndex`** — 页面展示结果后单独 dispatch `advance`；最后一个事件之后才置 `completed` 且 day 停在 7（来自 [US-008]/[US-037]）
-- **同一 seed 的 RNG 流被抽牌与每次风险判定共享** — 刷新恢复用 `createChoiceRng` 重放；新增消耗随机数的引擎逻辑必须同步该函数，否则判定漂移（来自 [US-008]/[US-011]）
+- **同一 seed 的 RNG 流被抽牌与每次风险判定共享** — 刷新恢复用 `createChoiceRng` 重放（第二参传中段池总数，不是抽取数）；新增消耗随机数的引擎逻辑必须同步该函数，否则判定漂移（来自 [US-008]/[US-011]/[US-030b]）
 - **`resolveEnding(run)` 返回 `EndingTone`，不是结局 id** — 结算时按 `scenarioId + tone` 从场景结局表取 `Ending.id` 写入 `LastResult.endingId`（来自 [US-009]）
 - **存活天数统一取 `run.day`** — 死亡局不额外减 1；结算页与 `applyRunResult` 共用这一口径（来自 [US-009]）
 - **`applyRunResult(progress, lastResult)` 已合并 `newKnowledgeIds` 并去重** — 结算页直接传 `lastResult`，不要重复 push history 或另算 `runs` / `totalRuns`（来自 [US-036]）
