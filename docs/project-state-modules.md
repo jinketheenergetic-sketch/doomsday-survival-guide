@@ -6,7 +6,7 @@
 
 | 路径 | 职责 | 对外暴露 |
 | --- | --- | --- |
-| `app/` | Next.js App Router 页面与布局 | `layout.tsx`（根布局、字体变量、全局 Header/Footer）、`page.tsx`（首页场景大厅：Hero、进度统计、7 场景网格、知识小贴士）、`scenario/[slug]/page.tsx`（场景简报页：双色调封面、威胁等级、技能、专属资源、我的记录、吸底动作条；无效 slug 调用 `notFound()`） |
+| `app/` | Next.js App Router 页面与布局 | `layout.tsx`（根布局、字体变量、全局 Header/Footer）、`page.tsx`（首页场景大厅：Hero、进度统计、7 场景网格、知识小贴士）、`scenario/[slug]/page.tsx`（场景简报页：双色调封面、威胁等级、技能、专属资源、我的记录、吸底动作条；无效 slug 调用 `notFound()`）、`not-found.tsx`（404 页面：大号 meteor 图标 +「这个末日不存在，但别慌。」+ 回到大厅按钮，沿用全局 Header/Footer 与纸色背景） |
 | `components/site-header.tsx` | 全局导航（客户端组件）：Logo、场景/生存手册导航、当前路由高亮、音效开关 | `SiteHeader` |
 | `components/site-footer.tsx` | 全局页脚：科普免责声明与 Unsplash / Font Awesome 署名 | `SiteFooter` |
 | `components/home-stats.tsx` | 首页进度条带（客户端组件）：知识 x/42、结局 x/21、总存活天数、最佳评分 | `HomeStats` |
