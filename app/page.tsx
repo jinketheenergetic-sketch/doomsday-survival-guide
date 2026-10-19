@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 py-16">
+    <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-6 py-16">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-15"
