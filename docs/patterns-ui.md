@@ -13,3 +13,7 @@
 <!-- baseline:end -->
 
 <!-- 以下由 PM Agent 从实际开发中沉淀 -->
+- **读 localStorage 的客户端组件用 `useSyncExternalStore`** — `react-hooks/set-state-in-effect` 会拦截 `useEffect` + `setState` 的写法（来自 [US-004]）
+- **全局 Header/Footer 已挂在 `app/layout.tsx`** — 页面容器用 `flex-1` 占满剩余高度，不要再写 `min-h-dvh`，否则叠加出滚动条（来自 [US-004]）
+- **`next/font` 的 CSS 变量不要与 `@theme inline` 里声明的变量同名** — 同名会自我引用；next/font 用 `--font-zcool` 等，再由 `@theme inline` 映射到 `--font-display`（来自 [US-001]）
+- **新增路由要归入「场景」导航高亮时同步 `components/site-header.tsx`** — 现有约定：`/`、`/scenario/*`、`/play/*` 归场景，`/codex*` 归手册（来自 [US-004]）

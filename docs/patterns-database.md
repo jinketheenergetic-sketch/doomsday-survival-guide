@@ -10,3 +10,5 @@
 <!-- baseline:end -->
 
 <!-- 以下由 PM Agent 从实际开发中沉淀 -->
+- **给 `RunState` / `LastResult` 加字段时同步 `lib/storage.ts` 的 `toActiveRun` / `toLastResult`** — 二者校验严格，不同步的新字段会被静默丢弃并回退默认值（来自 [US-003]）
+- **`StorageAdapter` 目前是同步签名** — 二期 SQLite 若只能异步，在 `lib/storage.ts` 内加兼容层，不改页面调用方式（来自 [US-003]）

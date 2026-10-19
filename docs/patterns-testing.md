@@ -10,3 +10,5 @@
 <!-- baseline:end -->
 
 <!-- 以下由 PM Agent 从实际开发中沉淀 -->
+- **存储相关测试用 jsdom 自带的 `window.localStorage`** — 在 `beforeEach` 里 `window.localStorage.clear()` 隔离用例（来自 [US-003]）
+- **测试里 `import Home from "@/app/page"` 可顺带验证 `@/*` 别名解析** — 别名配置变动时这类测试会先失败（来自 [US-034]）

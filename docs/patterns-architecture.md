@@ -12,3 +12,4 @@
 <!-- baseline:end -->
 
 <!-- 以下由 PM Agent 从实际开发中沉淀 -->
+- **内容 story 需要新字段时先改 `lib/types.ts`** — 再同步 storage 校验与各场景内容，避免 7 个内容 story 各自补字段造成结构分裂（来自 [US-002]）

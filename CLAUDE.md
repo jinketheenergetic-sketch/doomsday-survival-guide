@@ -22,7 +22,7 @@
 
 - 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）与 `app/page.tsx`；通用组件在 `components/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
-- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；场景元数据：`data/scenarios/index.ts`
+- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
@@ -48,4 +48,11 @@
 <!-- dev-managed:end -->
 
 <!-- pm-managed:start -->
+## 项目定位（PM Agent 维护）
+
+面向中文玩家的纯前端末日生存决策卡牌 Roguelite：7 个灾变场景、每局 7 天、21 个结局与 42 张真实生存知识卡，进度存于本地。
+
+## 当前阶段重点
+
+基础设施（类型、存储、导航、测试）已就绪，进入页面骨架与游戏引擎实现；新内容一律复用 `lib/types.ts` 与 `StorageAdapter`，勿重复初始化既有设施。
 <!-- pm-managed:end -->
