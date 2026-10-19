@@ -20,7 +20,7 @@
 ## 项目结构
 单体 Next.js App Router 前端，无 `src/`；Tailwind v4 走 PostCSS（`postcss.config.mjs`，无 `tailwind.config`）。
 
-- 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/play/[slug]/page.tsx`（游戏页）、`app/play/[slug]/result/page.tsx`（结算页：结局、评分、复盘与进度写回）、`app/not-found.tsx`（404）；通用组件在 `components/`，游戏页组件在 `components/game/`
+- 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/play/[slug]/page.tsx`（游戏页）、`app/play/[slug]/result/page.tsx`（结算页：结局、评分、复盘与进度写回）、`app/codex/page.tsx`（生存手册图鉴：进度环、场景筛选、42 张知识卡与详情弹层）、`app/not-found.tsx`（404）；通用组件在 `components/`，游戏页组件在 `components/game/`，图鉴组件在 `components/codex/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
 - 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；进度合并与统计：`lib/progress.ts`；本局 reducer：`lib/gameReducer.ts`、`components/game/GameProvider.tsx`（useReducer + Context）；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景查询与元数据：`lib/scenarios.ts`、`data/scenarios/index.ts`、场景内容 `data/scenarios/<slug>/`（`events.ts` 事件牌组、`endings.ts` 结局、`knowledge.ts` 知识卡；未就绪时用 `data/scenarios/skeleton.ts` 占位）；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
