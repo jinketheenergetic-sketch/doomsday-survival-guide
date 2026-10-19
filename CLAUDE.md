@@ -18,16 +18,17 @@
 
 <!-- dev-managed:start -->
 ## 项目结构
-Next.js App Router 单体前端，无 `src/`；Tailwind v4 走 PostCSS（`postcss.config.mjs`，无 `tailwind.config`）。
+单体 Next.js App Router 前端，无 `src/`；Tailwind v4 走 PostCSS（`postcss.config.mjs`，无 `tailwind.config`）。
 
 - 入口：`app/layout.tsx`（字体）与 `app/page.tsx`
-- 设计令牌：`app/globals.css`（`--ink`/`--paper`/`--coral` 等 + 7 组场景渐变）
-- 图片配置：`next.config.ts`（仅允许 `images.unsplash.com`）
+- 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
+- 领域模型：`lib/types.ts`；场景元数据：`data/scenarios/index.ts`
+- 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
 ## 关键命令
 
-- 开发服务：`npm run dev`（固定 5343 端口）
+- 开发服务：`npm run dev`（固定 5343）
 - 构建 / 生产启动：`npm run build` / `npm run start`（5343）
 - 类型检查 / Lint：`npm run typecheck` / `npm run lint`
 - 测试：`npm test`
@@ -40,12 +41,9 @@ Next.js App Router 单体前端，无 `src/`；Tailwind v4 走 PostCSS（`postcs
 - docs/patterns-testing.md
 - docs/patterns-tooling.md
 
-## 内容简报（按需选读）
+## 内容简报与现状文档（按需选读）
 
 - docs/content-brief.md
-
-## 现状文档（按需选读）
-
 - docs/project-state-modules.md
 <!-- dev-managed:end -->
 
