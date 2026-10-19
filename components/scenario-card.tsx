@@ -28,7 +28,7 @@ export function ScenarioCard({
   return (
     <Link
       href={`/scenario/${scenario.id}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-card border-2 border-ink bg-surface shadow-card transition-[transform,box-shadow] duration-[var(--duration-normal)] ease-[var(--ease-cartoon)] hover:-translate-y-1.5 hover:-rotate-[0.5deg] hover:shadow-[0_24px_50px_-20px_rgba(25,26,46,0.55),0_6px_0_rgba(25,26,46,0.9)]"
+      className="card-sheen group relative flex h-full flex-col overflow-hidden rounded-card border-2 border-ink bg-surface shadow-card transition-[transform,box-shadow] duration-[var(--duration-normal)] ease-[var(--ease-cartoon)] hover:-translate-y-1.5 hover:-rotate-[0.5deg] hover:shadow-[0_24px_50px_-20px_rgba(25,26,46,0.55),0_6px_0_rgba(25,26,46,0.9)]"
     >
       <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-ink/10">
         {/* 渐变 + 图标兜底：封面加载失败时也不会出现破图。 */}

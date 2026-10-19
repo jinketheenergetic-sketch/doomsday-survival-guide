@@ -472,7 +472,7 @@ export function ResultScreen({
 
             <h1
               id="result-ending-title"
-              className="mt-3 font-display text-3xl leading-tight sm:text-5xl"
+              className="ending-title mt-3 font-display text-3xl leading-tight sm:text-5xl"
             >
               {ending.title}
             </h1>

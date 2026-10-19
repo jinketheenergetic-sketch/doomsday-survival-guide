@@ -38,9 +38,10 @@ export function ScenarioGrid({
         {scenarios.map((scenario, index) => (
           <div
             key={scenario.id}
-            className={
-              index === scenarios.length - 1 ? "lg:col-start-2" : undefined
-            }
+            className={`card-enter ${
+              index === scenarios.length - 1 ? "lg:col-start-2" : ""
+            }`}
+            style={{ animationDelay: `${index * 60}ms` }}
           >
             <ScenarioCard
               scenario={scenario}

@@ -100,7 +100,7 @@ function ResourceBar({ view }: { view: ResourceView }) {
         className="mt-1.5 h-2.5 overflow-hidden rounded-chip border border-ink/15 bg-paper"
       >
         <span
-          className="block h-full rounded-chip transition-[width] duration-[var(--duration-normal)] ease-[var(--ease-cartoon)]"
+          className="block h-full rounded-chip transition-[width] duration-[var(--duration-slow)] ease-[var(--ease-cartoon)]"
           style={{
             width: `${clampPercent(view.value, view.max)}%`,
             backgroundColor: view.color,
@@ -193,7 +193,7 @@ export function GameHud({
     <>
       <header
         aria-label="本局状态"
-        className="rounded-card border-2 border-ink bg-surface p-4 shadow-card sm:p-5"
+        className="card-sheen rounded-card border-2 border-ink bg-surface p-4 shadow-card sm:p-5"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">

@@ -62,7 +62,7 @@ export function ChoiceResultSheet({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="sheet-rise max-h-[85dvh] w-full max-w-2xl overflow-y-auto rounded-t-card border-2 border-b-0 border-ink bg-surface p-5 shadow-card sm:mb-6 sm:rounded-card sm:border-b-2 sm:p-6"
+        className="card-sheen sheet-rise max-h-[85dvh] w-full max-w-2xl overflow-y-auto rounded-t-card border-2 border-b-0 border-ink bg-surface p-5 shadow-card sm:mb-6 sm:rounded-card sm:border-b-2 sm:p-6"
       >
         <div className="flex items-start justify-between gap-3">
           <div>

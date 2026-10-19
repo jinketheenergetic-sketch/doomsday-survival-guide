@@ -103,7 +103,7 @@ export function EventCard({
   return (
     <article
       aria-labelledby={titleId}
-      className="mt-4 overflow-hidden rounded-card border-2 border-ink bg-surface shadow-card"
+      className="card-enter card-sheen mt-4 overflow-hidden rounded-card border-2 border-ink bg-surface shadow-card"
     >
       {/* 插画区：渐变 + 场景图标 + CSS 形状 */}
       <div
@@ -194,7 +194,7 @@ export function EventCard({
                 disabled={disabled}
                 aria-keyshortcuts={`${index + 1} ${CHOICE_LETTERS[index]}`}
                 onClick={() => onSelect?.(choice)}
-                className="flex min-h-11 w-full items-start gap-3 rounded-button border-2 border-ink bg-surface p-3 text-left shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)] disabled:pointer-events-none disabled:opacity-55 sm:p-4"
+                className="choice-highlight flex min-h-11 w-full items-start gap-3 rounded-button border-2 border-ink bg-surface p-3 text-left shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)] disabled:pointer-events-none disabled:opacity-55 sm:p-4"
               >
                 <span
                   aria-hidden

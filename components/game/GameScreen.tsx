@@ -239,6 +239,7 @@ function GameRoom({
         {pending ? (
           currentEvent && (
             <EventCard
+              key={`${run.day}-${currentEvent.id}`}
               scenario={scenario}
               event={currentEvent}
               knowledge={content.knowledge}
@@ -260,6 +261,7 @@ function GameRoom({
           </p>
         ) : currentEvent ? (
           <EventCard
+            key={`${run.day}-${currentEvent.id}`}
             scenario={scenario}
             event={currentEvent}
             knowledge={content.knowledge}

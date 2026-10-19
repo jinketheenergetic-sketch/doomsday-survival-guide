@@ -1,4 +1,9 @@
-import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookOpen,
+  faFire,
+  faSnowflake,
+  faWater,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
@@ -35,6 +40,47 @@ export default function Home() {
           className="absolute inset-0 opacity-[0.05]"
           style={{ backgroundImage: "var(--noise)" }}
         />
+        {/* 径向渐隐的网格：中间清晰、边缘淡出 */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(25, 26, 46, 0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(25, 26, 46, 0.07) 1px, transparent 1px)",
+            backgroundSize: "44px 44px",
+            maskImage:
+              "radial-gradient(ellipse at 50% 35%, black 0%, transparent 72%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse at 50% 35%, black 0%, transparent 72%)",
+          }}
+        />
+        {/* 漂浮的末日图标：纯装饰，不参与朗读与交互。 */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <span className="absolute left-[4%] top-[14%] hidden -rotate-12 text-coral/30 md:block">
+            <FontAwesomeIcon
+              icon={faFire}
+              className="float-drift h-10 w-10"
+              style={{ animationDelay: "0s" }}
+            />
+          </span>
+          <span className="absolute right-[6%] top-[18%] hidden rotate-6 text-teal/30 sm:block">
+            <FontAwesomeIcon
+              icon={faSnowflake}
+              className="float-drift h-9 w-9"
+              style={{ animationDelay: "1.2s", animationDuration: "7s" }}
+            />
+          </span>
+          <span className="absolute bottom-[12%] left-[46%] hidden -rotate-6 text-sun/50 lg:block">
+            <FontAwesomeIcon
+              icon={faWater}
+              className="float-drift h-11 w-11"
+              style={{ animationDelay: "2.4s", animationDuration: "8s" }}
+            />
+          </span>
+        </div>
 
         <div className="relative mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[55fr_45fr] lg:items-center lg:py-20">
           <div className="flex flex-col items-start gap-5">
@@ -70,7 +116,7 @@ export default function Home() {
             {heroStack.map((scenario, index) => (
               <div
                 key={scenario.id}
-                className={`absolute left-4 top-4 h-64 w-72 rounded-card border-2 border-ink p-5 shadow-card ${heroStackStyles[index]}`}
+                className={`card-sheen absolute left-4 top-4 h-64 w-72 rounded-card border-2 border-ink p-5 shadow-card ${heroStackStyles[index]}`}
                 style={{
                   background: `var(--gradient-${scenario.id})`,
                   zIndex: index + 1,

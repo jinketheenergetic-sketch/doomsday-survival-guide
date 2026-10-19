@@ -12,8 +12,8 @@
 | `components/settings-dialog.tsx` | 全局设置弹层（客户端组件）：音效开关、减少动效开关、重置全部进度的二次确认；Esc 或点击遮罩关闭，打开后焦点移到关闭按钮 | `SettingsDialog({ onClose })` |
 | `components/settings-sync.tsx` | 把「减少动效」设置同步为根元素 `data-reduced-motion` 属性，供 `globals.css` 统一关闭动画；不渲染任何内容 | `SettingsSync` |
 | `components/home-stats.tsx` | 首页进度条带（客户端组件）：知识 x/42、结局 x/21、总存活天数、最佳评分 | `HomeStats` |
-| `components/scenario-grid.tsx` | 首页场景网格（客户端组件）：渲染 7 张场景卡并按存档传入星级 | `ScenarioGrid` |
-| `components/scenario-card.tsx` | 场景卡（客户端组件）：双色调封面 + 图标兜底、编号、星级、专属资源 chip、进入箭头 | `ScenarioCard` |
+| `components/scenario-grid.tsx` | 首页场景网格（客户端组件）：渲染 7 张场景卡并按存档传入星级，卡片带 60ms 递增的入场动画 | `ScenarioGrid` |
+| `components/scenario-card.tsx` | 场景卡（客户端组件）：双色调封面 + 图标兜底、编号、星级、专属资源 chip、进入箭头；`card-sheen` 渐变高光 | `ScenarioCard` |
 | `components/scenario-cover.tsx` | 场景双色调封面（客户端组件）：渐变 + 图标兜底，照片加载失败时卸载图片 | `ScenarioCover` |
 | `components/scenario-record.tsx` | 简报页「我的记录」（客户端组件）：最佳分、最佳星级、3 个结局槽位（未解锁显示 `???`）、局数 | `ScenarioRecord` |
 | `components/random-scenario-button.tsx` | Hero「随机灾变」按钮（客户端组件）：随机跳转 `/scenario/[slug]` | `RandomScenarioButton` |
@@ -23,13 +23,13 @@
 | `components/game/GameProvider.tsx` | 本局状态 Provider（客户端组件）：`useReducer` + Context 暴露 `state` / `dispatch`；挂载后经 `StorageAdapter` 从 `activeRun` 恢复，可用 `resolveRun(stored)` 决定沿用存档还是新建，run 变化时写回；不直接访问 `localStorage` | `GameProvider`（可注入 `adapter` / `resolveRun`）、`useGame()`、`GameContextValue`、`GameProviderProps` |
 | `components/game/GameScreen.tsx` | 游戏页客户端外壳与对局交互：用 `Date.now()` 种子与 `getScenarioContent` 的事件新建对局（同场景存档则恢复），包装 `GameProvider`；按 `run.deck[run.eventIndex]` 取当前事件，处理点击 / 键盘 1-3 选择、`resolveChoice` 结算、知识卡首次解锁、`activeRun` 写回、继续推进与第 7 天 / 死亡的 `LastResult` 生成与结算页跳转；刷新后用 history 恢复待确认结果 | `GameScreen({ content })` |
 | `components/game/GameHud.tsx` | 游戏页 HUD（客户端组件）：`第 x/7 天`、7 个天数圆点、5 项通用资源 + 场景专属资源的进度条；资源数字变化时播放 `value-pop` 动画，`aria-live="polite"` 播报最近一次结算；移动端收为紧凑图标 + 数字并可展开抽屉；退出按钮弹出确认对话框，确认后返回场景简报且不清除 `activeRun` | `GameHud({ scenario, run })` |
-| `components/game/EventCard.tsx` | 当前回合事件卡（客户端组件）：渐变 + 图标 + CSS 形状的插画区、幕名、标题、正文、默认收起的「冷知识」折叠区、3 个 A/B/C 选项按钮（效果预览 chip，风险选项附成功率与成功/失败分支）；支持 `onSelect` 与结算期间的 `disabled` | `EventCard({ scenario, event, knowledge?, onSelect?, disabled? })`、`EventCardProps` |
+| `components/game/EventCard.tsx` | 当前回合事件卡（客户端组件）：渐变 + 图标 + CSS 形状的插画区、幕名、标题、正文、默认收起的「冷知识」折叠区、3 个 A/B/C 选项按钮（效果预览 chip，风险选项附成功率与成功/失败分支，悬停/聚焦有高光扫过）；支持 `onSelect` 与结算期间的 `disabled`；按 `key={day}-{eventId}` 重新挂载触发入场动画 | `EventCard({ scenario, event, knowledge?, onSelect?, disabled? })`、`EventCardProps` |
 | `components/game/ChoiceResultSheet.tsx` | 选择结果底部弹层（客户端组件）：结果文案、风险成功 / 失败标记、实际资源变化 chip、关联 `knowledgeId` 的知识贴士与「继续」按钮；最终回合提示进入结算页 | `ChoiceResultSheet({ scenario, result, knowledge?, final, onContinue })`、`ChoiceResultSheetProps` |
 | `components/game/resource-chips.tsx` | 资源变化 chip 的共用渲染：把资源变化整理成 chip 数据，正向绿色 / 负向红色，供事件卡预览与结果弹层共用 | `DeltaChipView`、`describeDelta(effects, specificEffect, scenario)`、`DeltaChip({ chip, prefix? })` |
 | `components/game/resource-display.ts` | 5 项通用资源的展示元数据（键、名称、FontAwesome 图标、颜色），供 HUD、事件卡与结果弹层共用 | `CommonResourceDisplay`、`COMMON_RESOURCES` |
-| `components/game/ResultScreen.tsx` | 结算页主体（客户端组件）：结局插画（doom 灰暗滤镜 +「你尽力了（大概）」标签）、结局标题/结语/「结局 x/3」、分数滚动与星级点亮、终局资源与存活天数、移动端默认折叠的生存报告（✓/•/✗ + 正确做法）、本次解锁知识卡、再来一局/换个末日/查看生存手册入口；无结果或 slug 不匹配时重定向到场景简报 | `ResultScreen({ scenario, endings, knowledge, events })`、`ResultScreenProps` |
+| `components/game/ResultScreen.tsx` | 结算页主体（客户端组件）：结局插画（doom 灰暗滤镜 +「你尽力了（大概）」标签）、带入场动画的结局标题/结语/「结局 x/3」、分数滚动与星级点亮、终局资源与存活天数、移动端默认折叠的生存报告（✓/•/✗ + 正确做法）、本次解锁知识卡、再来一局/换个末日/查看生存手册入口；无结果或 slug 不匹配时重定向到场景简报 | `ResultScreen({ scenario, endings, knowledge, events })`、`ResultScreenProps` |
 | `components/game/result-store.ts` | 结算页的一次性会话：`useSyncExternalStore` 快照读取 `lastResult`，首次渲染后调用 `applyRunResult` 写回进度、清空 `activeRun` 与 `lastResult`，并通知订阅者刷新结局收集数 | `ResultSnapshot`、`getResultSnapshot()`、`getServerResultSnapshot()`、`subscribeResult(listener)`、`applyResultOnce(result)` |
-| `app/globals.css` | Tailwind v4 入口 + 设计令牌（颜色、圆角、阴影、动效、7 组场景渐变）+ 结果弹层 `sheet-rise`、资源数字 `value-pop` 与结算星级 `star-pop` 动效类；`prefers-reduced-motion` 与 `[data-reduced-motion="true"]` 两套等效的关闭动画规则 | CSS 变量与 `@theme inline` 映射出的 Tailwind 工具类、`.sheet-rise`、`.value-pop`、`.star-pop` |
+| `app/globals.css` | Tailwind v4 入口 + 设计令牌（颜色、圆角、阴影、动效、7 组场景渐变）+ 结果弹层 `sheet-rise`、资源数字 `value-pop`、结算星级 `star-pop`、事件卡/场景卡入场 `card-enter`、Hero 漂浮图标 `float-drift`、结局标题 `ending-title` 与卡片高光 `.card-sheen`、选项高光扫过 `.choice-highlight` 等动效类；`prefers-reduced-motion` 与 `[data-reduced-motion="true"]` 两套等效的关闭动画规则（同时清零 delay） | CSS 变量与 `@theme inline` 映射出的 Tailwind 工具类、`.sheet-rise`、`.value-pop`、`.star-pop`、`.card-enter`、`.float-drift`、`.ending-title`、`.card-sheen`、`.choice-highlight` |
 | `lib/types.ts` | 领域模型类型与常量（场景、事件、选项、知识卡、结局、本局状态、进度、设置、结算结果）；`RunState.newKnowledgeIds` 记录本局首次解锁的知识卡 | `Scenario`、`GameEvent`、`Choice`、`RiskBranch`、`KnowledgeCard`、`Ending`、`RunState`、`Progress`、`Settings`、`LastResult` 等类型；`SCENARIO_IDS`、`RESOURCE_KEYS` |
 | `lib/storage.ts` | 存档适配器：版本信封、默认值、损坏数据回退、前缀重置；`activeRun` 校验会保留可选的 `newKnowledgeIds` | `StorageAdapter`、`StorageBackend`、`createStorageAdapter(backend?)`、`storageAdapter`、`STORAGE_KEYS`、`STORAGE_PREFIX`、`STORAGE_VERSION`、`createDefaultProgress()`、`createDefaultSettings()` |
 | `lib/use-progress.ts` | 客户端读取进度的 `useSyncExternalStore` hook；服务端快照为空进度，内容不变时复用同一引用 | `useProgress()` |
