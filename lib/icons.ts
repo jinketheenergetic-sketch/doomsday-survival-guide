@@ -1,6 +1,7 @@
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faBookOpen,
+  faBottleWater,
   faElevator,
   faFire,
   faHandshake,
@@ -8,6 +9,7 @@ import {
   faHouseCrack,
   faKitMedical,
   faMeteor,
+  faPersonWalking,
   faRobot,
   faScrewdriverWrench,
   faServer,
@@ -16,10 +18,13 @@ import {
   faStairs,
   faStar,
   faSun,
+  faTemperatureArrowDown,
   faTemperatureLow,
   faTowerBroadcast,
+  faTriangleExclamation,
   faUserShield,
   faWater,
+  faWind,
 } from "@fortawesome/free-solid-svg-icons";
 
 /**
@@ -46,6 +51,11 @@ const iconByName: Record<string, IconDefinition> = {
   server: faServer,
   handshake: faHandshake,
   "screwdriver-wrench": faScrewdriverWrench,
+  "person-walking": faPersonWalking,
+  wind: faWind,
+  "triangle-exclamation": faTriangleExclamation,
+  "temperature-arrow-down": faTemperatureArrowDown,
+  "bottle-water": faBottleWater,
 };
 
 export function getIconByName(name: string): IconDefinition {

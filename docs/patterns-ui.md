@@ -26,3 +26,4 @@
 - **资源名称/图标/颜色集中在 `components/game/resource-display.ts`** — 新增资源 chip 直接复用，不要各自维护 label/icon（来自 [US-010b]）
 - **`useSyncExternalStore` 的服务端快照用独立 `loading` 哨兵** — 区分「未水合」与「确实无数据」，否则预渲染阶段会误跳转（来自 [US-012]）
 - **结算页「结局 x/3」的 x = 写回后该场景已解锁结局数** — 不是本次结局在 3 个槽位中的序号（来自 [US-012]）
+- **新增 FontAwesome 图标名先用 `node -e "require('@fortawesome/free-solid-svg-icons')"` 确认导出存在** — 再登记到 `lib/icons.ts`，否则 tsc 报不存在的导出（来自 [US-023]）

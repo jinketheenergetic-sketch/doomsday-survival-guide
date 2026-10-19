@@ -13,3 +13,4 @@
 - **存储相关测试用 jsdom 自带的 `window.localStorage`** — 在 `beforeEach` 里 `window.localStorage.clear()` 隔离用例（来自 [US-003]）
 - **测试里 `import Home from "@/app/page"` 可顺带验证 `@/*` 别名解析** — 别名配置变动时这类测试会先失败（来自 [US-034]）
 - **jsdom 不实现 `window.matchMedia`** — 读取 `prefers-reduced-motion` 前先判空（来自 [US-012]）
+- **标题类断言逐字复制 content-brief** — 中文单引号等标点原样保留，替换引号样式会让测试与简报不一致（来自 [US-023]）

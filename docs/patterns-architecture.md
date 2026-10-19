@@ -38,3 +38,4 @@
 - **结局 id 固定为 `<scenarioId>-<tone>`（如 `flood-best`）** — 与 `resolveEnding` 返回的 `EndingTone` 一一对应，`tests/progress.test.ts` / `tests/storage.test.ts` 按该格式写死样例（来自 [US-015]）
 - **知识卡 id 由本场景 `events.ts` 先行定义（格式 `<scenarioId>-<slug>`），内容 story 反向建卡** — 测试同时校验引用可解析与每张卡至少被引用一次，防拼写漂移与死卡（来自 [US-015]/[US-019]）
 - **结局文案回扣同场景 `events.ts` 终局 bad 选项的意象** — 两段式内容 story 之间互相呼应，比重新发明细节更连贯（来自 [US-017]/[US-019]）
+- **一张知识卡可被多个事件复用** — 建卡内容要覆盖全部引用语境（如正午高温既在加油站也在赶路），不要只对着第一个事件写（来自 [US-024]）
