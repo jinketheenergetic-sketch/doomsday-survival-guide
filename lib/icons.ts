@@ -3,12 +3,14 @@ import {
   faBookOpen,
   faBottleWater,
   faElevator,
+  faFaceLaugh,
   faFire,
   faHandshake,
   faHardDrive,
   faHouseCrack,
   faKitMedical,
   faMeteor,
+  faMugHot,
   faPersonWalking,
   faRobot,
   faScrewdriverWrench,
@@ -56,6 +58,8 @@ const iconByName: Record<string, IconDefinition> = {
   "triangle-exclamation": faTriangleExclamation,
   "temperature-arrow-down": faTemperatureArrowDown,
   "bottle-water": faBottleWater,
+  "mug-hot": faMugHot,
+  "face-laugh": faFaceLaugh,
 };
 
 export function getIconByName(name: string): IconDefinition {
