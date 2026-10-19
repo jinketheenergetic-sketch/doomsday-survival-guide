@@ -20,8 +20,17 @@
 - **动态路由页面的 `params` 是 Promise** — Next 16 下类型写 `{ params: Promise<{ slug: string }> }` 并 `await params`（来自 [US-006]）
 - **固定 slug 的动态路由要提供 `generateStaticParams()`** — 只 `await params` 仍会被判为 runtime data，构建报 `blocking-prerender-dynamic`（来自 [US-038]）
 - **`resolveChoice` 与 `commitChoice` 都不推进 `day` / `eventIndex`** — 页面展示结果后单独 dispatch `advance`；最后一个事件之后才置 `completed` 且 day 停在 7（来自 [US-008]/[US-037]）
-- **同一 seed 的 RNG 流被抽牌与每次风险判定共享** — 刷新恢复时要重建已消耗的随机步数，否则后续风险判定会漂移（来自 [US-008]/[US-037]）
+- **同一 seed 的 RNG 流被抽牌与每次风险判定共享** — 刷新恢复用 `createChoiceRng` 重放；新增消耗随机数的引擎逻辑必须同步该函数，否则判定漂移（来自 [US-008]/[US-011]）
 - **`resolveEnding(run)` 返回 `EndingTone`，不是结局 id** — 结算时按 `scenarioId + tone` 从场景结局表取 `Ending.id` 写入 `LastResult.endingId`（来自 [US-009]）
 - **存活天数统一取 `run.day`** — 死亡局不额外减 1；结算页与 `applyRunResult` 共用这一口径（来自 [US-009]）
 - **`applyRunResult(progress, lastResult)` 已合并 `newKnowledgeIds` 并去重** — 结算页直接传 `lastResult`，不要重复 push history 或另算 `runs` / `totalRuns`（来自 [US-036]）
 - **`GameProvider` 只读写 `activeRun`** — `lastResult` 与进度的写回由结算页负责，不要扩展 Provider 的存储职责（来自 [US-037]）
+- **已结算未推进用 `run.history.length > run.eventIndex` 推导** — `resolveChoice` 不推进 `eventIndex`，`advance` 后两者相等（来自 [US-011]）
+- **`advance` 会清空 `lastResult`** — 结果弹层直接读 `state.lastResult`，不要另存一份 pending 副本（来自 [US-011]）
+- **结算写回后清空 `activeRun` 与 `lastResult`** — 用模块级缓存让当前页继续渲染；保留 `lastResult` 会让刷新重复计入 `totalRuns`（来自 [US-012]）
+- **同一标签页内 `saveProgress` 不触发 `storage` 事件** — 写回进度后需显式通知 `useProgress` 的订阅者（来自 [US-012]）
+- **内容未就绪时统一用 `createSkeletonEvents` 兜底** — 游戏页与结算页共用同一份，保证历史 `eventId` 可回查（来自 [US-010a]/[US-012]）
+- **`GameEvent.choices` 是 `readonly [Choice, Choice, Choice]`** — 标注为 `readonly GameEvent[]` 时 3 元素字面量自动按元组校验，无需 `as const`（来自 [US-014]）
+- **风险选项也要写 `resultText`** — 结算走 `risk.successText`/`failureText`，但内容校验要求每个选项都有该字段（来自 [US-014]）
+- **7 张中段里至少 4 张带风险** — 才能保证任意 5 张子集仍含 2 个风险选项（US-033 的牌组约束）（来自 [US-014]）
+- **`Ending` 没有插画字段** — 结算页用场景封面叠滤镜表达结局基调，内容 story 不要为结局新增插画字段（来自 [US-012]）

@@ -42,9 +42,10 @@
 | `data/scenarios/flood/events.ts` | 融冰纪元事件牌组：9 个事件（1 开场 + 7 中段 + 1 终局），每个事件 3 个选项（good / ok / bad）；5 张中段事件带风险分支，保证任意 5 张中段至少含 2 个风险选项；所有 `knowledgeId` 指向 `data/scenarios/flood/knowledge.ts` 中的 6 张洪水知识卡 | `floodEvents`（`readonly GameEvent[]`） |
 | `data/scenarios/flood/endings.ts` | 融冰纪元 3 个结局：best / neutral / doom 各一个，id 为 `flood-best` / `flood-neutral` / `flood-doom`，与 `resolveEnding` 的基调对应 | `floodEndings`（`readonly Ending[]`） |
 | `data/scenarios/flood/knowledge.ts` | 融冰纪元 6 张知识卡（急流、饮水消毒、垂直撤离、失温、屋顶求救、伤口破伤风），id 与事件引用一致 | `floodKnowledge`（`readonly KnowledgeCard[]`） |
+| `data/scenarios/quake/events.ts` | 地裂之日事件牌组：9 个事件（1 开场 + 7 中段 + 1 终局），每个事件 3 个选项（good / ok / bad）；5 张中段事件带风险分支，保证任意 5 张中段至少含 2 个风险选项；所有 `knowledgeId` 指向 US-017 将落地的 6 张地震知识卡 | `quakeEvents`（`readonly GameEvent[]`） |
 | `data/scenarios/skeleton.ts` | 内容 story 落地前的占位事件牌组：为任意场景生成 1 开场 + 5 中段 + 1 终局，供游戏页在真实 `events` 为空时生成合法 7 回合对局；选项带示例资源变化与一个风险分支，便于展示效果预览 | `createSkeletonEvents(scenario)` |
 | `data/knowledge/index.ts` | 全局知识卡注册表（当前为空数组，待各场景 knowledge 内容汇总） | `knowledgeCards`、`knowledgeById`、`getKnowledgeCard(id)` |
-| `tests/` | Vitest + jsdom + Testing Library 测试 | `setup.ts`（jest-dom 匹配器）、`home.test.tsx`（mock 了 `next/navigation` 的 `useRouter`）、`scenarios.test.ts`、`storage.test.ts`、`engine-rng.test.ts`、`engine-constants.test.ts`、`engine-deck.test.ts`、`engine-resolve.test.ts`、`engine-score.test.ts`、`progress.test.ts`、`game-reducer.test.ts`、`game-provider.test.tsx`（内存 `StorageBackend` 注入适配器）、`flood-events.test.ts`（融冰纪元事件牌组结构与风险分支校验）、`flood-content.test.ts`（融冰纪元结局、知识卡与 knowledgeId 可解析性校验） |
+| `tests/` | Vitest + jsdom + Testing Library 测试 | `setup.ts`（jest-dom 匹配器）、`home.test.tsx`（mock 了 `next/navigation` 的 `useRouter`）、`scenarios.test.ts`、`storage.test.ts`、`engine-rng.test.ts`、`engine-constants.test.ts`、`engine-deck.test.ts`、`engine-resolve.test.ts`、`engine-score.test.ts`、`progress.test.ts`、`game-reducer.test.ts`、`game-provider.test.tsx`（内存 `StorageBackend` 注入适配器）、`flood-events.test.ts`（融冰纪元事件牌组结构与风险分支校验）、`flood-content.test.ts`（融冰纪元结局、知识卡与 knowledgeId 可解析性校验）、`quake-events.test.ts`（地裂之日事件牌组结构与风险分支校验） |
 | `public/` | 静态资源（脚手架默认图标） | 静态文件 |
 
 ## 配置文件
