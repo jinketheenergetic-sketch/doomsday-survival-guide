@@ -22,7 +22,7 @@
 
 - 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/not-found.tsx`（404）；通用组件在 `components/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
-- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
+- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；进度合并与统计：`lib/progress.ts`；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
