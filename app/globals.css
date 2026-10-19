@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — 末日生存指南：别慌
+   命名与取值见 docs 及 PRD《5. 视觉设计系统》
+--------------------------------------------------------------------------- */
+:root {
+  /* 基础色 */
+  --ink: #191a2e;
+  --ink-soft: #4a4c6b;
+  --paper: #fff9ef;
+  --surface: #ffffff;
+  --coral: #ff6b57;
+  --teal: #19b9a7;
+  --sun: #ffc94d;
+  --danger: #e5484d;
+  --success: #2f9e5f;
+
+  /* 圆角 */
+  --radius-card: 28px;
+  --radius-button: 18px;
+  --radius-chip: 999px;
+  --radius-small: 20px;
+
+  /* 卡通层叠阴影 */
+  --shadow-card: 0 18px 40px -22px rgba(25, 26, 46, 0.45),
+    0 4px 0 rgba(25, 26, 46, 0.9);
+  --shadow-button: 0 4px 0 var(--ink);
+  --shadow-button-pressed: 0 2px 0 var(--ink);
+  --highlight: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5),
+    transparent 45%
+  );
+
+  /* 纸张噪点（内联 SVG，避免额外请求） */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+
+  /* 动效 */
+  --ease-cartoon: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 320ms;
+  --duration-slow: 600ms;
+
+  /* 七组场景渐变 */
+  --scene-flood-from: #22d3ee;
+  --scene-flood-to: #2563eb;
+  --gradient-flood: linear-gradient(
+    135deg,
+    var(--scene-flood-from) 0%,
+    var(--scene-flood-to) 100%
+  );
+
+  --scene-quake-from: #f59e0b;
+  --scene-quake-to: #ef4444;
+  --gradient-quake: linear-gradient(
+    135deg,
+    var(--scene-quake-from) 0%,
+    var(--scene-quake-to) 100%
+  );
+
+  --scene-meteor-from: #fb7185;
+  --scene-meteor-to: #9a3412;
+  --gradient-meteor: linear-gradient(
+    135deg,
+    var(--scene-meteor-from) 0%,
+    var(--scene-meteor-to) 100%
+  );
+
+  --scene-ice-from: #93c5fd;
+  --scene-ice-to: #4338ca;
+  --gradient-ice: linear-gradient(
+    135deg,
+    var(--scene-ice-from) 0%,
+    var(--scene-ice-to) 100%
+  );
+
+  --scene-ai-from: #c084fc;
+  --scene-ai-to: #db2777;
+  --gradient-ai: linear-gradient(
+    135deg,
+    var(--scene-ai-from) 0%,
+    var(--scene-ai-to) 100%
+  );
+
+  --scene-drought-from: #fde68a;
+  --scene-drought-to: #d97706;
+  --gradient-drought: linear-gradient(
+    135deg,
+    var(--scene-drought-from) 0%,
+    var(--scene-drought-to) 100%
+  );
+
+  --scene-heatdeath-from: #6366f1;
+  --scene-heatdeath-to: #0f172a;
+  --gradient-heatdeath: linear-gradient(
+    135deg,
+    var(--scene-heatdeath-from) 0%,
+    var(--scene-heatdeath-to) 100%
+  );
+}
+
+/* 让设计令牌可直接作为 Tailwind 工具类使用（bg-paper、rounded-card…） */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-coral: var(--coral);
+  --color-teal: var(--teal);
+  --color-sun: var(--sun);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --radius-card: var(--radius-card);
+  --radius-button: var(--radius-button);
+  --radius-chip: var(--radius-chip);
+  --radius-small: var(--radius-small);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-button: var(--shadow-button);
+
+  --font-display: var(--font-zcool), system-ui, sans-serif;
+  --font-body: var(--font-noto), system-ui, sans-serif;
+  --font-numeric: var(--font-baloo), system-ui, sans-serif;
+  --font-sans: var(--font-noto), system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-noto), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-zcool), system-ui, sans-serif;
+  line-height: 1.15;
+}
+
+:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
