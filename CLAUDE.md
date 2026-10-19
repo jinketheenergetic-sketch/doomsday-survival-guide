@@ -22,7 +22,7 @@
 
 - 入口：`app/layout.tsx`（字体）与 `app/page.tsx`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
-- 领域模型：`lib/types.ts`；场景元数据：`data/scenarios/index.ts`
+- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；场景元数据：`data/scenarios/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
@@ -44,7 +44,7 @@
 ## 内容简报与现状文档（按需选读）
 
 - docs/content-brief.md
-- docs/project-state-modules.md
+- 现状：docs/project-state-modules.md、docs/project-state-database.md
 <!-- dev-managed:end -->
 
 <!-- pm-managed:start -->
