@@ -26,6 +26,8 @@
 
 # local agent tooling / orchestration (not part of the app)
 .claude/
+.cdp-browser/
+screenshots/
 scripts/
 
 # debug

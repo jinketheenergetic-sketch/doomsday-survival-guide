@@ -17,8 +17,8 @@
 | --- | --- |
 | `next.config.ts` | `images.remotePatterns` 仅允许 `images.unsplash.com` |
 | `postcss.config.mjs` | Tailwind v4 的 `@tailwindcss/postcss` 插件 |
-| `eslint.config.mjs` | `eslint-config-next` (core-web-vitals + typescript)，忽略 `.claude/**`、`scripts/**` |
-| `vitest.config.mts` | jsdom 环境、`tests/setup.ts`、`tests/**/*.test.{ts,tsx}` |
+| `eslint.config.mjs` | `eslint-config-next` (core-web-vitals + typescript)，忽略 `.claude/**`、`.cdp-browser/**`、`scripts/**`、`screenshots/**` |
+| `vitest.config.ts` | jsdom 环境、`tests/setup.ts`、`tests/**/*.test.{ts,tsx}`；`resolve.tsconfigPaths` 解析 `@/*` 别名 |
 | `tsconfig.json` | TypeScript strict、`@/*` 路径别名 |
 
 ## 依赖约定

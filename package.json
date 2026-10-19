@@ -2,6 +2,7 @@
   "name": "doomsday-survival-guide",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --port 5343",
     "build": "next build",
@@ -34,7 +35,6 @@
     "jsdom": "^30.1.3",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^5.0.5"
   }
 }

@@ -14,7 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // 工具链与本地产物，不属于应用源码
     ".claude/**",
+    ".cdp-browser/**",
     "scripts/**",
+    "screenshots/**",
   ]),
 ]);
 
