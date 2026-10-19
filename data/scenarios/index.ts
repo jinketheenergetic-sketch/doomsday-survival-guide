@@ -1,4 +1,32 @@
-import type { Scenario, ScenarioId } from "@/lib/types";
+import { aiEndings } from "@/data/scenarios/ai/endings";
+import { aiEvents } from "@/data/scenarios/ai/events";
+import { aiKnowledge } from "@/data/scenarios/ai/knowledge";
+import { droughtEndings } from "@/data/scenarios/drought/endings";
+import { droughtEvents } from "@/data/scenarios/drought/events";
+import { droughtKnowledge } from "@/data/scenarios/drought/knowledge";
+import { floodEndings } from "@/data/scenarios/flood/endings";
+import { floodEvents } from "@/data/scenarios/flood/events";
+import { floodKnowledge } from "@/data/scenarios/flood/knowledge";
+import { heatdeathEndings } from "@/data/scenarios/heatdeath/endings";
+import { heatdeathEvents } from "@/data/scenarios/heatdeath/events";
+import { heatdeathKnowledge } from "@/data/scenarios/heatdeath/knowledge";
+import { iceEndings } from "@/data/scenarios/ice/endings";
+import { iceEvents } from "@/data/scenarios/ice/events";
+import { iceKnowledge } from "@/data/scenarios/ice/knowledge";
+import { meteorEndings } from "@/data/scenarios/meteor/endings";
+import { meteorEvents } from "@/data/scenarios/meteor/events";
+import { meteorKnowledge } from "@/data/scenarios/meteor/knowledge";
+import { quakeEndings } from "@/data/scenarios/quake/endings";
+import { quakeEvents } from "@/data/scenarios/quake/events";
+import { quakeKnowledge } from "@/data/scenarios/quake/knowledge";
+import type {
+  Ending,
+  GameEvent,
+  KnowledgeCard,
+  Scenario,
+  ScenarioContent,
+  ScenarioId,
+} from "@/lib/types";
 
 /**
  * 七个末日场景的元数据。
@@ -136,4 +164,65 @@ export function getScenario(
   id: ScenarioId | string,
 ): Scenario | undefined {
   return scenarioById[id as ScenarioId];
+}
+
+/** 各场景已落地的事件、结局与知识卡。 */
+const contentByScenarioId: Record<
+  ScenarioId,
+  {
+    events: readonly GameEvent[];
+    endings: readonly Ending[];
+    knowledge: readonly KnowledgeCard[];
+  }
+> = {
+  flood: {
+    events: floodEvents,
+    endings: floodEndings,
+    knowledge: floodKnowledge,
+  },
+  quake: {
+    events: quakeEvents,
+    endings: quakeEndings,
+    knowledge: quakeKnowledge,
+  },
+  meteor: {
+    events: meteorEvents,
+    endings: meteorEndings,
+    knowledge: meteorKnowledge,
+  },
+  ice: {
+    events: iceEvents,
+    endings: iceEndings,
+    knowledge: iceKnowledge,
+  },
+  ai: {
+    events: aiEvents,
+    endings: aiEndings,
+    knowledge: aiKnowledge,
+  },
+  drought: {
+    events: droughtEvents,
+    endings: droughtEndings,
+    knowledge: droughtKnowledge,
+  },
+  heatdeath: {
+    events: heatdeathEvents,
+    endings: heatdeathEndings,
+    knowledge: heatdeathKnowledge,
+  },
+};
+
+/** 七个场景的完整内容，按 slug 索引。 */
+export const scenarioContentById = Object.fromEntries(
+  scenarios.map((scenario) => [
+    scenario.id,
+    { scenario, ...contentByScenarioId[scenario.id] },
+  ]),
+) as Record<ScenarioId, ScenarioContent>;
+
+/** 按 slug 取场景完整内容；未知 slug 返回 undefined。 */
+export function getScenarioContent(
+  id: ScenarioId | string,
+): ScenarioContent | undefined {
+  return scenarioContentById[id as ScenarioId];
 }
