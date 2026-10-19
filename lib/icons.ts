@@ -1,12 +1,17 @@
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faBookOpen,
+  faFire,
   faHouseCrack,
+  faKitMedical,
   faMeteor,
   faRobot,
   faSnowflake,
+  faStairs,
   faStar,
   faSun,
+  faTemperatureLow,
+  faTowerBroadcast,
   faWater,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -22,6 +27,11 @@ const iconByName: Record<string, IconDefinition> = {
   robot: faRobot,
   sun: faSun,
   star: faStar,
+  fire: faFire,
+  stairs: faStairs,
+  "temperature-low": faTemperatureLow,
+  "tower-broadcast": faTowerBroadcast,
+  "kit-medical": faKitMedical,
 };
 
 export function getIconByName(name: string): IconDefinition {

@@ -22,7 +22,7 @@
 
 - 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/play/[slug]/page.tsx`（游戏页）、`app/play/[slug]/result/page.tsx`（结算页：结局、评分、复盘与进度写回）、`app/not-found.tsx`（404）；通用组件在 `components/`，游戏页组件在 `components/game/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
-- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；进度合并与统计：`lib/progress.ts`；本局 reducer：`lib/gameReducer.ts`、`components/game/GameProvider.tsx`（useReducer + Context）；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景查询与元数据：`lib/scenarios.ts`、`data/scenarios/index.ts`、场景内容 `data/scenarios/<slug>/`（`events.ts` 事件牌组；未就绪时用 `data/scenarios/skeleton.ts` 占位）；知识卡注册表：`data/knowledge/index.ts`
+- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；进度合并与统计：`lib/progress.ts`；本局 reducer：`lib/gameReducer.ts`、`components/game/GameProvider.tsx`（useReducer + Context）；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景查询与元数据：`lib/scenarios.ts`、`data/scenarios/index.ts`、场景内容 `data/scenarios/<slug>/`（`events.ts` 事件牌组、`endings.ts` 结局、`knowledge.ts` 知识卡；未就绪时用 `data/scenarios/skeleton.ts` 占位）；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
@@ -54,5 +54,5 @@
 
 ## 当前阶段重点
 
-引擎、reducer、进度纯函数与预渲染修复已就绪；先完成游戏页（HUD → 事件卡 → 结算），再补 7 个场景的真实内容、US-035 聚合与图鉴。内容字段以 `lib/types.ts` 为准：选项文案用 `resultText`，风险分支写进 `risk`，知识卡用 `content`。
+游戏页主链路（HUD → 事件卡 → 结算 → 结果页）已完成，当前在补 7 个场景的真实内容。US-035 聚合落地前，内容 story 的「Verify in browser」按「应用可加载、可交互、无本轮引入的运行时错误」验收，内容正确性由单测覆盖。内容字段以 `lib/types.ts` 为准：选项文案用 `resultText`，风险分支写进 `risk`，知识卡用 `content`；知识卡 id 以本场景 `events.ts` 的引用为准。
 <!-- pm-managed:end -->
