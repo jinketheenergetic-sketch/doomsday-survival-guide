@@ -10,7 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSyncExternalStore } from "react";
+import { Suspense, useSyncExternalStore } from "react";
 
 import { storageAdapter } from "@/lib/storage";
 
@@ -42,16 +42,68 @@ function isScenariosRoute(pathname: string): boolean {
   );
 }
 
-export function SiteHeader() {
+function NavLinks({
+  scenariosActive,
+  codexActive,
+}: {
+  scenariosActive: boolean;
+  codexActive: boolean;
+}) {
+  return (
+    <nav aria-label="主导航" className="flex items-center gap-1 sm:gap-2">
+      <Link
+        href="/"
+        aria-current={scenariosActive ? "page" : undefined}
+        className={`inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-chip border-2 px-3 font-semibold transition-colors duration-[var(--duration-fast)] sm:px-4 ${
+          scenariosActive
+            ? "border-ink bg-sun text-ink shadow-button"
+            : "border-transparent text-ink-soft hover:border-ink/20 hover:bg-white/70"
+        }`}
+      >
+        <FontAwesomeIcon icon={faCompass} aria-hidden />
+        <span className="sm:hidden">场景</span>
+        <span className="hidden sm:inline">场景大厅</span>
+      </Link>
+
+      <Link
+        href="/codex"
+        aria-current={codexActive ? "page" : undefined}
+        className={`inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-chip border-2 px-3 font-semibold transition-colors duration-[var(--duration-fast)] sm:px-4 ${
+          codexActive
+            ? "border-ink bg-sun text-ink shadow-button"
+            : "border-transparent text-ink-soft hover:border-ink/20 hover:bg-white/70"
+        }`}
+      >
+        <FontAwesomeIcon icon={faBookOpen} aria-hidden />
+        <span className="sm:hidden">手册</span>
+        <span className="hidden sm:inline">生存手册</span>
+      </Link>
+    </nav>
+  );
+}
+
+/** usePathname 必须在 Suspense 内读取，否则会阻塞 cacheComponents 的静态预渲染。 */
+function HeaderNav() {
   const pathname = usePathname() ?? "/";
+  return (
+    <NavLinks
+      scenariosActive={isScenariosRoute(pathname)}
+      codexActive={pathname.startsWith("/codex")}
+    />
+  );
+}
+
+/** 预渲染用占位：与 HeaderNav 同结构但不高亮，避免布局跳动。 */
+function HeaderNavFallback() {
+  return <NavLinks scenariosActive={false} codexActive={false} />;
+}
+
+export function SiteHeader() {
   const soundEnabled = useSyncExternalStore(
     subscribeSound,
     getSoundSnapshot,
     getServerSoundSnapshot,
   );
-
-  const scenariosActive = isScenariosRoute(pathname);
-  const codexActive = pathname.startsWith("/codex");
 
   function toggleSound() {
     const settings = storageAdapter.getSettings();
@@ -83,35 +135,9 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <nav aria-label="主导航" className="flex items-center gap-1 sm:gap-2">
-            <Link
-              href="/"
-              aria-current={scenariosActive ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-chip border-2 px-3 font-semibold transition-colors duration-[var(--duration-fast)] sm:px-4 ${
-                scenariosActive
-                  ? "border-ink bg-sun text-ink shadow-button"
-                  : "border-transparent text-ink-soft hover:border-ink/20 hover:bg-white/70"
-              }`}
-            >
-              <FontAwesomeIcon icon={faCompass} aria-hidden />
-              <span className="sm:hidden">场景</span>
-              <span className="hidden sm:inline">场景大厅</span>
-            </Link>
-
-            <Link
-              href="/codex"
-              aria-current={codexActive ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-chip border-2 px-3 font-semibold transition-colors duration-[var(--duration-fast)] sm:px-4 ${
-                codexActive
-                  ? "border-ink bg-sun text-ink shadow-button"
-                  : "border-transparent text-ink-soft hover:border-ink/20 hover:bg-white/70"
-              }`}
-            >
-              <FontAwesomeIcon icon={faBookOpen} aria-hidden />
-              <span className="sm:hidden">手册</span>
-              <span className="hidden sm:inline">生存手册</span>
-            </Link>
-          </nav>
+          <Suspense fallback={<HeaderNavFallback />}>
+            <HeaderNav />
+          </Suspense>
 
           <button
             type="button"

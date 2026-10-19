@@ -19,6 +19,11 @@ interface ScenarioPageProps {
   params: Promise<{ slug: string }>;
 }
 
+/** 七个场景全部在构建时预渲染，避免 `params` 阻塞静态外壳。 */
+export function generateStaticParams(): Array<{ slug: string }> {
+  return scenarios.map((scenario) => ({ slug: scenario.id }));
+}
+
 export async function generateMetadata({
   params,
 }: ScenarioPageProps): Promise<Metadata> {
