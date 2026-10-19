@@ -20,7 +20,7 @@
 ## 项目结构
 单体 Next.js App Router 前端，无 `src/`；Tailwind v4 走 PostCSS（`postcss.config.mjs`，无 `tailwind.config`）。
 
-- 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）与 `app/page.tsx`；通用组件在 `components/`
+- 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）；通用组件在 `components/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
 - 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`

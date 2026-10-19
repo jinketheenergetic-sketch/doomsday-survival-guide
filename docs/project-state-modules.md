@@ -6,12 +6,14 @@
 
 | 路径 | 职责 | 对外暴露 |
 | --- | --- | --- |
-| `app/` | Next.js App Router 页面与布局 | `layout.tsx`（根布局、字体变量、全局 Header/Footer）、`page.tsx`（首页场景大厅：Hero、进度统计、7 场景网格、知识小贴士） |
+| `app/` | Next.js App Router 页面与布局 | `layout.tsx`（根布局、字体变量、全局 Header/Footer）、`page.tsx`（首页场景大厅：Hero、进度统计、7 场景网格、知识小贴士）、`scenario/[slug]/page.tsx`（场景简报页：双色调封面、威胁等级、技能、专属资源、我的记录、吸底动作条；无效 slug 调用 `notFound()`） |
 | `components/site-header.tsx` | 全局导航（客户端组件）：Logo、场景/生存手册导航、当前路由高亮、音效开关 | `SiteHeader` |
 | `components/site-footer.tsx` | 全局页脚：科普免责声明与 Unsplash / Font Awesome 署名 | `SiteFooter` |
 | `components/home-stats.tsx` | 首页进度条带（客户端组件）：知识 x/42、结局 x/21、总存活天数、最佳评分 | `HomeStats` |
 | `components/scenario-grid.tsx` | 首页场景网格（客户端组件）：渲染 7 张场景卡并按存档传入星级 | `ScenarioGrid` |
 | `components/scenario-card.tsx` | 场景卡（客户端组件）：双色调封面 + 图标兜底、编号、星级、专属资源 chip、进入箭头 | `ScenarioCard` |
+| `components/scenario-cover.tsx` | 场景双色调封面（客户端组件）：渐变 + 图标兜底，照片加载失败时卸载图片 | `ScenarioCover` |
+| `components/scenario-record.tsx` | 简报页「我的记录」（客户端组件）：最佳分、最佳星级、3 个结局槽位（未解锁显示 `???`）、局数 | `ScenarioRecord` |
 | `components/random-scenario-button.tsx` | Hero「随机灾变」按钮（客户端组件）：随机跳转 `/scenario/[slug]` | `RandomScenarioButton` |
 | `components/knowledge-tip.tsx` | 首页知识小贴士（客户端组件）：从已解锁知识卡中选一条链接到 `/codex`，无卡片时显示解锁提示 | `KnowledgeTip` |
 | `app/globals.css` | Tailwind v4 入口 + 设计令牌（颜色、圆角、阴影、动效、7 组场景渐变） | CSS 变量与 `@theme inline` 映射出的 Tailwind 工具类 |
