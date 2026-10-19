@@ -34,3 +34,7 @@
 - **风险选项也要写 `resultText`** — 结算走 `risk.successText`/`failureText`，但内容校验要求每个选项都有该字段（来自 [US-014]）
 - **7 张中段里至少 4 张带风险** — 才能保证任意 5 张子集仍含 2 个风险选项（US-033 的牌组约束）（来自 [US-014]）
 - **`Ending` 没有插画字段** — 结算页用场景封面叠滤镜表达结局基调，内容 story 不要为结局新增插画字段（来自 [US-012]）
+- **场景专属资源初始值与 good 路线总增量之和控制在 100 以内** — `resolveChoice` 不钳制专属资源，HUD 进度条按 100 为上限，超出会显示溢出（来自 [US-014]/[US-019]）
+- **结局 id 固定为 `<scenarioId>-<tone>`（如 `flood-best`）** — 与 `resolveEnding` 返回的 `EndingTone` 一一对应，`tests/progress.test.ts` / `tests/storage.test.ts` 按该格式写死样例（来自 [US-015]）
+- **知识卡 id 由本场景 `events.ts` 先行定义（格式 `<scenarioId>-<slug>`），内容 story 反向建卡** — 测试同时校验引用可解析与每张卡至少被引用一次，防拼写漂移与死卡（来自 [US-015]/[US-019]）
+- **结局文案回扣同场景 `events.ts` 终局 bad 选项的意象** — 两段式内容 story 之间互相呼应，比重新发明细节更连贯（来自 [US-017]/[US-019]）
