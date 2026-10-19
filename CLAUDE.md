@@ -22,7 +22,7 @@
 
 - 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/not-found.tsx`（404）；通用组件在 `components/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
-- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建，纯函数）；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
+- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算，纯函数）；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
@@ -54,5 +54,5 @@
 
 ## 当前阶段重点
 
-基础设施（类型、存储、导航、测试）已就绪，进入页面骨架与游戏引擎实现；新内容一律复用 `lib/types.ts` 与 `StorageAdapter`，勿重复初始化既有设施。
+引擎与页面骨架并行推进：RNG / 常量 / 牌组已就绪，当前实现选项结算与评分；后续内容 story 需把 42 张知识卡汇总进 `data/knowledge/index.ts`，UI 复用 `useProgress()` 与 `ScenarioCover`。
 <!-- pm-managed:end -->

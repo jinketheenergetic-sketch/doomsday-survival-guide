@@ -24,9 +24,10 @@
 | `lib/engine/rng.ts` | 确定性随机数：mulberry32 PRNG 与整数取值辅助，供抽牌/风险判定复现同一局 | `Rng` 类型、`mulberry32(seed)`、`randomInt(rng, min, max)`（闭区间） |
 | `lib/engine/constants.ts` | 引擎集中数值：初始资源、资源上下限、天数、抽牌数、评分系数与星级阈值、best 结局阈值、断水断食扣血 | `INITIAL_RESOURCES`、`RESOURCE_MIN/MAX`、`RUN_DAYS`、`MIDDLE_EVENT_DRAW_COUNT`、`SCORE_*`、`THREE_STAR_MIN_SCORE`、`TWO_STAR_MIN_SCORE`、`BEST_ENDING_MIN_SCORE`、`BEST_ENDING_MIN_SPECIFIC`、`DEPRIVATION_HP_PENALTY` |
 | `lib/engine/deck.ts` | 牌组与回合引擎：按幕校验事件池、Fisher–Yates 抽 5 张中段、生成固定 7 回合牌组与初始 `RunState` | `EventPool`、`splitEventPool(scenarioId, events)`、`drawMiddleEvents(middle, rng)`、`buildDeck(scenario, seed, events)`、`buildRun(scenario, seed, events, startedAt?)` |
+| `lib/engine/resolve.ts` | 选项结算引擎：应用确定/风险分支效果、5 项资源钳制 0–100、断水断食扣 HP、HP/理智归零判定死亡；不推进 day/eventIndex | `ChoiceResolution`、`resolveChoice(run, choice, rng)` → `{ state, result }` |
 | `data/scenarios/index.ts` | 7 个场景的元数据注册表 | `scenarios`（7 项数组）、`scenarioById`、`getScenario(id)` |
 | `data/knowledge/index.ts` | 全局知识卡注册表（当前为空数组，待各场景 knowledge 内容汇总） | `knowledgeCards`、`knowledgeById`、`getKnowledgeCard(id)` |
-| `tests/` | Vitest + jsdom + Testing Library 测试 | `setup.ts`（jest-dom 匹配器）、`home.test.tsx`（mock 了 `next/navigation` 的 `useRouter`）、`scenarios.test.ts`、`storage.test.ts`、`engine-rng.test.ts`、`engine-constants.test.ts`、`engine-deck.test.ts` |
+| `tests/` | Vitest + jsdom + Testing Library 测试 | `setup.ts`（jest-dom 匹配器）、`home.test.tsx`（mock 了 `next/navigation` 的 `useRouter`）、`scenarios.test.ts`、`storage.test.ts`、`engine-rng.test.ts`、`engine-constants.test.ts`、`engine-deck.test.ts`、`engine-resolve.test.ts` |
 | `public/` | 静态资源（脚手架默认图标） | 静态文件 |
 
 ## 配置文件

@@ -17,3 +17,6 @@
 - **全局 Header/Footer 已挂在 `app/layout.tsx`** — 页面容器用 `flex-1` 占满剩余高度，不要再写 `min-h-dvh`，否则叠加出滚动条（来自 [US-004]）
 - **`next/font` 的 CSS 变量不要与 `@theme inline` 里声明的变量同名** — 同名会自我引用；next/font 用 `--font-zcool` 等，再由 `@theme inline` 映射到 `--font-display`（来自 [US-001]）
 - **新增路由要归入「场景」导航高亮时同步 `components/site-header.tsx`** — 现有约定：`/`、`/scenario/*`、`/play/*` 归场景，`/codex*` 归手册（来自 [US-004]）
+- **渲染期间禁止调用 `Math.random`** — `react-hooks/purity` 会报错；需要「随机展示」时用基于数据的确定性哈希，或把随机放进事件回调（来自 [US-005]）
+- **场景封面统一复用 `components/scenario-cover.tsx`** — 渐变层 + 大图标永远垫底，`next/image` 的 `onError` 卸载图片；不要重写这套兜底（来自 [US-006]）
+- **图标名统一经 `lib/icons.ts` 的 `getIconByName()` 解析** — 新增图标名要在该文件登记，否则会回退成手册图标（来自 [US-005]）
