@@ -13,7 +13,7 @@ import { useId, useState } from "react";
 import { COMMON_RESOURCES } from "@/components/game/resource-display";
 import { RESOURCE_MAX, RUN_DAYS } from "@/lib/engine/constants";
 import { getIconByName } from "@/lib/icons";
-import type { RunState, Scenario } from "@/lib/types";
+import type { ChoiceResult, RunState, Scenario } from "@/lib/types";
 
 interface ResourceView {
   key: string;
@@ -50,6 +50,27 @@ function clampPercent(value: number, max: number): number {
   return Math.max(0, Math.min(100, (value / max) * 100));
 }
 
+/** 把最近一次结算整理成屏幕阅读器播报的一句话。 */
+function describeLatestResult(
+  result: ChoiceResult | undefined,
+  scenario: Scenario,
+): string {
+  if (!result) return "";
+
+  const parts: string[] = [];
+  for (const resource of COMMON_RESOURCES) {
+    const delta = result.resourceDelta[resource.key];
+    if (delta) parts.push(`${resource.label}${delta > 0 ? "+" : ""}${delta}`);
+  }
+  if (result.specificDelta !== 0) {
+    parts.push(
+      `${scenario.specificResource.label}${result.specificDelta > 0 ? "+" : ""}${result.specificDelta}`,
+    );
+  }
+
+  return `第 ${result.day} 天结算：${parts.length > 0 ? parts.join("，") : "资源没有变化"}。`;
+}
+
 function ResourceBar({ view }: { view: ResourceView }) {
   return (
     <div>
@@ -63,7 +84,10 @@ function ResourceBar({ view }: { view: ResourceView }) {
           />
           {view.label}
         </span>
-        <span className="font-numeric text-sm font-bold text-ink">
+        <span
+          key={view.value}
+          className="value-pop font-numeric text-sm font-bold text-ink"
+        >
           {view.value}
         </span>
       </div>
@@ -96,7 +120,10 @@ function CompactResource({ view }: { view: ResourceView }) {
         className="h-4 w-4"
         style={{ color: view.color }}
       />
-      <span className="font-numeric text-sm font-bold text-ink">
+      <span
+        key={view.value}
+        className="value-pop font-numeric text-sm font-bold text-ink"
+      >
         {view.value}
       </span>
       <span className="sr-only">{view.label}</span>
@@ -151,6 +178,10 @@ export function GameHud({
   const dialogDescriptionId = useId();
 
   const views = buildResourceViews(scenario, run);
+  const announcement = describeLatestResult(
+    run.history[run.history.length - 1],
+    scenario,
+  );
 
   function confirmExit() {
     setExitOpen(false);
@@ -185,6 +216,11 @@ export function GameHud({
         </div>
 
         <DayDots day={run.day} />
+
+        {/* 资源变化播报；内容随最近一次结算更新。 */}
+        <p aria-live="polite" className="sr-only">
+          {announcement}
+        </p>
 
         {/* 桌面端：直接展开全部资源条。 */}
         <div className="mt-4 hidden gap-x-5 gap-y-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">

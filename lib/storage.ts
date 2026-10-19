@@ -196,6 +196,7 @@ function toActiveRun(value: unknown): RunState | null {
 
   const resources = toResources(value.resources);
   const history = toHistory(value.history);
+  const newKnowledgeIds = toStringArray(value.newKnowledgeIds);
   if (
     !isScenarioId(value.scenarioId) ||
     !isFiniteNumber(value.seed) ||
@@ -224,6 +225,7 @@ function toActiveRun(value: unknown): RunState | null {
     specificResource: value.specificResource,
     status: value.status,
     history,
+    ...(newKnowledgeIds.length > 0 ? { newKnowledgeIds } : {}),
     goodCount: value.goodCount,
     badCount: value.badCount,
     startedAt: value.startedAt,

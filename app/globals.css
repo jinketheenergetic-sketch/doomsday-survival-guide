@@ -149,6 +149,39 @@ h6 {
   outline-offset: 2px;
 }
 
+/* 选择结果弹层从底部滑入 */
+@keyframes sheet-rise {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sheet-rise {
+  animation: sheet-rise var(--duration-normal) var(--ease-cartoon);
+}
+
+/* 资源数字变化时轻微弹一下；数值变化靠 React key 重新挂载触发 */
+@keyframes value-pop {
+  0% {
+    color: var(--coral);
+    transform: scale(1.2);
+  }
+  100% {
+    color: inherit;
+    transform: scale(1);
+  }
+}
+
+.value-pop {
+  display: inline-block;
+  animation: value-pop var(--duration-normal) var(--ease-cartoon);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

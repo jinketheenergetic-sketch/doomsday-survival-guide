@@ -40,7 +40,13 @@ export const initialGameState: GameState = {
 export type GameAction =
   | { type: "create"; run: RunState }
   | { type: "restore"; run: RunState | null }
-  | { type: "commitChoice"; resolution: ChoiceResolution; at?: string }
+  | {
+      type: "commitChoice";
+      resolution: ChoiceResolution;
+      /** 本次选择首次解锁的知识卡 id；重复解锁不必传入。 */
+      newKnowledgeId?: string;
+      at?: string;
+    }
   | { type: "advance"; at?: string }
   | { type: "end"; at?: string };
 
@@ -81,10 +87,19 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (!state.run || state.run.status !== "playing") return state;
 
       const resolved = action.resolution.state;
+      const known = resolved.newKnowledgeIds ?? [];
+      const withKnowledge =
+        action.newKnowledgeId && !known.includes(action.newKnowledgeId)
+          ? {
+              ...resolved,
+              newKnowledgeIds: [...known, action.newKnowledgeId],
+            }
+          : resolved;
+
       const run =
         resolved.status === "dead"
-          ? finishRun(resolved, "dead", action.at)
-          : resolved;
+          ? finishRun(withKnowledge, "dead", action.at)
+          : withKnowledge;
 
       return { run, lastResult: action.resolution.result };
     }
@@ -93,7 +108,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (!state.run) return state;
 
       const run = advanceRun(state.run, action.at);
-      return run === state.run ? state : { ...state, run };
+      return run === state.run ? state : { ...state, run, lastResult: null };
     }
 
     case "end": {

@@ -1,6 +1,5 @@
 "use client";
 
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faChevronDown,
   faChevronUp,
@@ -10,76 +9,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useId, useState } from "react";
 
-import { COMMON_RESOURCES } from "@/components/game/resource-display";
+import { DeltaChip, describeDelta } from "@/components/game/resource-chips";
 import { getKnowledgeCard } from "@/data/knowledge";
 import { getIconByName } from "@/lib/icons";
-import type {
-  Choice,
-  GameEvent,
-  KnowledgeCard,
-  ResourceDelta,
-  Scenario,
-} from "@/lib/types";
+import type { Choice, GameEvent, KnowledgeCard, Scenario } from "@/lib/types";
 
 const CHOICE_LETTERS = ["A", "B", "C"] as const;
-
-interface DeltaChipView {
-  key: string;
-  label: string;
-  delta: number;
-  icon: IconDefinition;
-}
-
-/** 把选项声明的效果整理成可展示的 chip（0 值不展示）。 */
-function describeEffects(
-  effects: ResourceDelta | undefined,
-  specificEffect: number | undefined,
-  scenario: Scenario,
-): DeltaChipView[] {
-  const chips: DeltaChipView[] = [];
-
-  for (const resource of COMMON_RESOURCES) {
-    const delta = effects?.[resource.key] ?? 0;
-    if (delta !== 0) {
-      chips.push({
-        key: resource.key,
-        label: resource.label,
-        delta,
-        icon: resource.icon,
-      });
-    }
-  }
-
-  if (specificEffect) {
-    chips.push({
-      key: scenario.specificResource.key,
-      label: scenario.specificResource.label,
-      delta: specificEffect,
-      icon: getIconByName(scenario.icon),
-    });
-  }
-
-  return chips;
-}
-
-function DeltaChip({ chip, prefix }: { chip: DeltaChipView; prefix?: string }) {
-  const positive = chip.delta > 0;
-
-  return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-chip border px-2 py-0.5 text-xs font-semibold ${
-        positive
-          ? "border-success/35 bg-success/10 text-success"
-          : "border-danger/35 bg-danger/10 text-danger"
-      }`}
-    >
-      <FontAwesomeIcon icon={chip.icon} aria-hidden className="h-3 w-3" />
-      {prefix ? `${prefix}·` : ""}
-      {chip.label} {positive ? "+" : ""}
-      {chip.delta}
-    </span>
-  );
-}
 
 /** 选项下方的效果预览：风险选项额外展示成功率与成功 / 失败分支。 */
 function ChoicePreview({
@@ -91,12 +26,12 @@ function ChoicePreview({
 }) {
   if (choice.risk) {
     const { probability, successEffects, failureEffects } = choice.risk;
-    const successChips = describeEffects(
+    const successChips = describeDelta(
       successEffects,
       choice.risk.successSpecificEffect,
       scenario,
     );
-    const failureChips = describeEffects(
+    const failureChips = describeDelta(
       failureEffects,
       choice.risk.failureSpecificEffect,
       scenario,
@@ -118,11 +53,7 @@ function ChoicePreview({
     );
   }
 
-  const chips = describeEffects(
-    choice.effects,
-    choice.specificEffect,
-    scenario,
-  );
+  const chips = describeDelta(choice.effects, choice.specificEffect, scenario);
 
   return (
     <span className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -142,6 +73,9 @@ export interface EventCardProps {
   event: GameEvent;
   /** 场景自带的知识卡；查不到时回退到全局注册表。 */
   knowledge?: readonly KnowledgeCard[];
+  /** 点击选项；结算面板打开期间由 `disabled` 拦截重复选择。 */
+  onSelect?: (choice: Choice) => void;
+  disabled?: boolean;
 }
 
 /**
@@ -150,7 +84,13 @@ export interface EventCardProps {
  * 插画区只用场景渐变 + 图标 + CSS 形状（不使用照片）；「冷知识」默认收起，
  * 关联的知识卡内容来自场景内容或全局知识卡注册表。
  */
-export function EventCard({ scenario, event, knowledge }: EventCardProps) {
+export function EventCard({
+  scenario,
+  event,
+  knowledge,
+  onSelect,
+  disabled = false,
+}: EventCardProps) {
   const [knowledgeOpen, setKnowledgeOpen] = useState(false);
   const titleId = useId();
   const knowledgePanelId = useId();
@@ -251,7 +191,9 @@ export function EventCard({ scenario, event, knowledge }: EventCardProps) {
             <li key={choice.id}>
               <button
                 type="button"
-                className="flex min-h-11 w-full items-start gap-3 rounded-button border-2 border-ink bg-surface p-3 text-left shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)] sm:p-4"
+                disabled={disabled}
+                onClick={() => onSelect?.(choice)}
+                className="flex min-h-11 w-full items-start gap-3 rounded-button border-2 border-ink bg-surface p-3 text-left shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)] disabled:pointer-events-none disabled:opacity-55 sm:p-4"
               >
                 <span
                   aria-hidden
@@ -270,21 +212,23 @@ export function EventCard({ scenario, event, knowledge }: EventCardProps) {
           ))}
         </ol>
 
-        <p className="mt-4 text-center text-xs font-semibold text-ink-soft">
-          按{" "}
-          <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
-            1
-          </kbd>{" "}
-          /{" "}
-          <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
-            2
-          </kbd>{" "}
-          /{" "}
-          <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
-            3
-          </kbd>{" "}
-          选择
-        </p>
+        {!disabled && (
+          <p className="mt-4 text-center text-xs font-semibold text-ink-soft">
+            按{" "}
+            <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
+              1
+            </kbd>{" "}
+            /{" "}
+            <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
+              2
+            </kbd>{" "}
+            /{" "}
+            <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
+              3
+            </kbd>{" "}
+            选择
+          </p>
+        )}
       </div>
     </article>
   );

@@ -21,7 +21,7 @@ import {
   RESOURCE_MAX,
   RESOURCE_MIN,
 } from "./constants";
-import { randomInt, type Rng } from "./rng";
+import { mulberry32, randomInt, type Rng } from "./rng";
 
 /** 一次选项结算的返回值。 */
 export interface ChoiceResolution {
@@ -33,6 +33,32 @@ export interface ChoiceResolution {
 
 function clampResource(value: number): number {
   return Math.min(Math.max(value, RESOURCE_MIN), RESOURCE_MAX);
+}
+
+/**
+ * 重建本局下一次风险判定应使用的随机源。
+ *
+ * 同一 seed 的随机流被抽牌与每次风险判定共享：抽牌阶段消耗
+ * `middleEventCount - 1` 次（Fisher–Yates），此后每个已结算的风险选项再消耗 1 次。
+ * 刷新页面后按历史重建消耗步数，同一选项的判定结果与刷新前一致。
+ */
+export function createChoiceRng(
+  seed: number,
+  middleEventCount: number,
+  history: readonly ChoiceResult[],
+): Rng {
+  const rng = mulberry32(seed);
+  const dealDraws = Math.max(0, middleEventCount - 1);
+  const riskDraws = history.reduce(
+    (count, item) => count + (item.riskSucceeded === undefined ? 0 : 1),
+    0,
+  );
+
+  for (let index = 0; index < dealDraws + riskDraws; index += 1) {
+    rng();
+  }
+
+  return rng;
 }
 
 /**

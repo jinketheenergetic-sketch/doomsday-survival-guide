@@ -162,6 +162,8 @@ export interface RunState {
   specificResource: number;
   status: RunStatus;
   history: readonly ChoiceResult[];
+  /** 本局首次解锁的知识卡 id（相对玩家已有进度），结算时写入 `LastResult`。 */
+  newKnowledgeIds?: readonly string[];
   goodCount: number;
   badCount: number;
   startedAt: string;

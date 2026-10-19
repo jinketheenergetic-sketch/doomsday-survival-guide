@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { scenarioById } from "@/data/scenarios";
 import { INITIAL_RESOURCES } from "@/lib/engine/constants";
 import { buildRun } from "@/lib/engine/deck";
-import { resolveChoice } from "@/lib/engine/resolve";
+import { createChoiceRng, resolveChoice } from "@/lib/engine/resolve";
 import { mulberry32 } from "@/lib/engine/rng";
 import type { Choice, GameEvent, Resources, RunState } from "@/lib/types";
 
@@ -450,6 +450,47 @@ describe("resolveChoice 断水断食惩罚", () => {
     );
 
     expect(result.resourceDelta.hp).toBe(-15);
+  });
+});
+
+describe("createChoiceRng 重建随机流", () => {
+  function historyEntry(riskSucceeded?: boolean) {
+    return {
+      day: 1,
+      eventId: "flood-opening",
+      choiceId: "choice",
+      quality: "ok" as const,
+      riskSucceeded,
+      resourceDelta: {},
+      specificDelta: 0,
+      text: "",
+    };
+  }
+
+  function expectedAfter(draws: number) {
+    const rng = mulberry32(20261019);
+    for (let index = 0; index < draws; index += 1) rng();
+    return rng();
+  }
+
+  it("跳过抽牌阶段的消耗", () => {
+    expect(createChoiceRng(20261019, 5, [])()).toBe(expectedAfter(4));
+  });
+
+  it("每个已结算的风险选项额外跳过一次", () => {
+    const history = [
+      historyEntry(true),
+      historyEntry(false),
+      historyEntry(undefined),
+    ];
+
+    expect(createChoiceRng(20261019, 5, history)()).toBe(expectedAfter(6));
+  });
+
+  it("确定型选项不消耗随机流", () => {
+    const history = [historyEntry(undefined), historyEntry(undefined)];
+
+    expect(createChoiceRng(20261019, 5, history)()).toBe(expectedAfter(4));
   });
 });
 

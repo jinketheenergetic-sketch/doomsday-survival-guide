@@ -154,6 +154,25 @@ describe("游戏 reducer：提交选择", () => {
     expect(state.run?.badCount).toBe(run.badCount + 1);
   });
 
+  it("记录本局首次解锁的知识卡，重复 id 不重复记录", () => {
+    const run = makeRun();
+    const first = gameReducer(makeState(run), {
+      type: "commitChoice",
+      resolution: commit(run, goodChoice),
+      newKnowledgeId: "flood-k1",
+    });
+
+    expect(first.run?.newKnowledgeIds).toEqual(["flood-k1"]);
+
+    const second = gameReducer(first, {
+      type: "commitChoice",
+      resolution: commit(first.run!, goodChoice),
+      newKnowledgeId: "flood-k1",
+    });
+
+    expect(second.run?.newKnowledgeIds).toEqual(["flood-k1"]);
+  });
+
   it("没有对局时不改变 state", () => {
     const resolution = commit(makeRun(), goodChoice);
 
@@ -188,6 +207,19 @@ describe("游戏 reducer：推进", () => {
     expect(state.run?.day).toBe(run.day + 1);
     expect(state.run?.eventIndex).toBe(run.eventIndex + 1);
     expect(state.run?.status).toBe("playing");
+  });
+
+  it("推进时清空上一次结算结果", () => {
+    const run = makeRun();
+    const previous: GameState = {
+      run,
+      lastResult: commit(run, goodChoice).result,
+    };
+
+    const state = gameReducer(previous, { type: "advance" });
+
+    expect(state.lastResult).toBeNull();
+    expect(state.run?.day).toBe(run.day + 1);
   });
 
   it("连续推进 6 次后到达最后一天", () => {
