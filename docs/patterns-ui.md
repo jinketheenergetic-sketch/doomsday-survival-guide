@@ -20,3 +20,6 @@
 - **渲染期间禁止调用 `Math.random`** — `react-hooks/purity` 会报错；需要「随机展示」时用基于数据的确定性哈希，或把随机放进事件回调（来自 [US-005]）
 - **场景封面统一复用 `components/scenario-cover.tsx`** — 渐变层 + 大图标永远垫底，`next/image` 的 `onError` 卸载图片；不要重写这套兜底（来自 [US-006]）
 - **图标名统一经 `lib/icons.ts` 的 `getIconByName()` 解析** — 新增图标名要在该文件登记，否则会回退成手册图标（来自 [US-005]）
+- **资源变化 chip 直接读 `ChoiceResolution.result.resourceDelta`** — 它是钳制后的实际差值，不要用选项声明的效果自行计算（来自 [US-008]）
+- **客户端组件里的 `usePathname()` 必须包在 `<Suspense>` 内** — cacheComponents 下否则构建报 `CLIENT_HOOK_DYNAMIC`；hook 拆到子组件、fallback 复用同一展示组件（来自 [US-038]）
+- **需要“只执行一次”的恢复 effect 用 `useRef` 记录阶段而非 `useState`** — 避免 `react-hooks/set-state-in-effect`（来自 [US-037]）

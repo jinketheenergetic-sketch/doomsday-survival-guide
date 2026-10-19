@@ -39,11 +39,24 @@ export interface GameProviderProps {
   children: ReactNode;
   /** 默认使用全局适配器；测试可注入自己的 `StorageAdapter`。 */
   adapter?: StorageAdapter;
+  /**
+   * 首次挂载时决定启用哪一局：入参是 `activeRun` 中的存档（没有则为 `null`），
+   * 返回值将作为本局状态。默认原样采用存档。返回新对象时视为新开局并写回存储。
+   */
+  resolveRun?: (stored: RunState | null) => RunState | null;
+}
+
+function resolveStoredRun(
+  stored: RunState | null,
+  resolveRun?: (stored: RunState | null) => RunState | null,
+): RunState | null {
+  return resolveRun ? resolveRun(stored) : stored;
 }
 
 export function GameProvider({
   children,
   adapter = storageAdapter,
+  resolveRun,
 }: GameProviderProps) {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
 
@@ -56,8 +69,18 @@ export function GameProvider({
   useEffect(() => {
     if (persistedRun.current === undefined) {
       const stored = adapter.getActiveRun();
-      persistedRun.current = stored;
-      if (stored) dispatch({ type: "restore", run: stored });
+      const initial = resolveStoredRun(stored, resolveRun);
+
+      // 沿用存档时保持同一引用，避免挂载后立刻重写；新开局强制写回。
+      persistedRun.current = initial === stored ? stored : null;
+
+      if (initial) {
+        dispatch(
+          initial === stored
+            ? { type: "restore", run: initial }
+            : { type: "create", run: initial },
+        );
+      }
       return;
     }
 
@@ -69,7 +92,7 @@ export function GameProvider({
     } else {
       adapter.clearActiveRun();
     }
-  }, [adapter, state.run]);
+  }, [adapter, resolveRun, state.run]);
 
   const value = useMemo<GameContextValue>(() => ({ state, dispatch }), [state]);
 

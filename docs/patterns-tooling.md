@@ -10,7 +10,7 @@
 
 <!-- 以下由 PM Agent 从实际开发中沉淀 -->
 - **Tailwind v4 走 `@tailwindcss/postcss` + `postcss.config.mjs`** — 不要用 `@tailwindcss/turbopack` loader：它会 spawn 子进程绑端口，沙箱内构建报 `Operation not permitted`（来自 [US-001]）
-- **本机 `npm run build` 可能因 Turbopack + PostCSS worker 绑端口失败** — 属环境限制，验证改动用 `typecheck`/`lint`/`test`，不要为此改构建配置（来自 [US-034]）
+- **`npm run build` 报绑端口 / `Operation not permitted` 时先 `rm -rf .next` 重试** — 常是 Turbopack 残留缓存；仍失败再按环境限制处理，用 typecheck/lint/test 验证、不改构建配置（来自 [US-034]/[US-038]）
 - **ESLint 9 会扫描整个仓库** — `.claude/**`、`scripts/**`、`.cdp-browser/**`、`screenshots/**` 必须进 globalIgnores，否则第三方脚本让 lint 直接失败（来自 [US-001]/[US-034]）
 - **FontAwesome 依赖锁 6.x** — npm latest 已是 7.x，`react-fontawesome@3` peer 兼容 `~6 || ~7`，装错违反 baseline（来自 [US-001]）
 - **`next/font/google` 在 build 时联网拉字体** — 离线或代理环境构建会失败，属环境问题而非代码错误（来自 [US-001]）

@@ -18,3 +18,10 @@
 - **`buildRun(scenario, seed, events)` 的事件池由调用方传入** — 引擎不读 `data/`，调用方先取 `getScenarioContent(slug).events`；US-037 复用 `buildRun` 生成初始状态（来自 [US-007]）
 - **客户端读进度统一用 `useProgress()`（`lib/use-progress.ts`）** — 内部用 JSON 比较缓存引用，避免适配器每次返回新对象导致 `useSyncExternalStore` 无限重渲染（来自 [US-005]）
 - **动态路由页面的 `params` 是 Promise** — Next 16 下类型写 `{ params: Promise<{ slug: string }> }` 并 `await params`（来自 [US-006]）
+- **固定 slug 的动态路由要提供 `generateStaticParams()`** — 只 `await params` 仍会被判为 runtime data，构建报 `blocking-prerender-dynamic`（来自 [US-038]）
+- **`resolveChoice` 与 `commitChoice` 都不推进 `day` / `eventIndex`** — 页面展示结果后单独 dispatch `advance`；最后一个事件之后才置 `completed` 且 day 停在 7（来自 [US-008]/[US-037]）
+- **同一 seed 的 RNG 流被抽牌与每次风险判定共享** — 刷新恢复时要重建已消耗的随机步数，否则后续风险判定会漂移（来自 [US-008]/[US-037]）
+- **`resolveEnding(run)` 返回 `EndingTone`，不是结局 id** — 结算时按 `scenarioId + tone` 从场景结局表取 `Ending.id` 写入 `LastResult.endingId`（来自 [US-009]）
+- **存活天数统一取 `run.day`** — 死亡局不额外减 1；结算页与 `applyRunResult` 共用这一口径（来自 [US-009]）
+- **`applyRunResult(progress, lastResult)` 已合并 `newKnowledgeIds` 并去重** — 结算页直接传 `lastResult`，不要重复 push history 或另算 `runs` / `totalRuns`（来自 [US-036]）
+- **`GameProvider` 只读写 `activeRun`** — `lastResult` 与进度的写回由结算页负责，不要扩展 Provider 的存储职责（来自 [US-037]）

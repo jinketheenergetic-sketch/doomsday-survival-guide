@@ -20,9 +20,9 @@
 ## 项目结构
 单体 Next.js App Router 前端，无 `src/`；Tailwind v4 走 PostCSS（`postcss.config.mjs`，无 `tailwind.config`）。
 
-- 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/not-found.tsx`（404）；通用组件在 `components/`
+- 入口：`app/layout.tsx`（字体 + 全局 Header/Footer）、`app/page.tsx`（场景大厅）、`app/scenario/[slug]/page.tsx`（场景简报）、`app/play/[slug]/page.tsx`（游戏页）、`app/not-found.tsx`（404）；通用组件在 `components/`，游戏页组件在 `components/game/`
 - 设计令牌：`app/globals.css`（颜色 + 7 组场景渐变）
-- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；进度合并与统计：`lib/progress.ts`；本局 reducer：`lib/gameReducer.ts`、`components/game/GameProvider.tsx`（useReducer + Context）；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景元数据：`data/scenarios/index.ts`；知识卡注册表：`data/knowledge/index.ts`
+- 领域模型：`lib/types.ts`；存储适配器：`lib/storage.ts`；进度合并与统计：`lib/progress.ts`；本局 reducer：`lib/gameReducer.ts`、`components/game/GameProvider.tsx`（useReducer + Context）；游戏引擎：`lib/engine/`（RNG、数值常量、牌组构建、选项结算、评分与结局，纯函数）；场景查询与元数据：`lib/scenarios.ts`、`data/scenarios/index.ts`（内容就绪前用 `data/scenarios/skeleton.ts` 占位牌组）；知识卡注册表：`data/knowledge/index.ts`
 - 图片：`next.config.ts` 仅允许 `images.unsplash.com`
 - 测试：`tests/`（Vitest + jsdom + Testing Library）
 
@@ -50,9 +50,9 @@
 <!-- pm-managed:start -->
 ## 项目定位（PM Agent 维护）
 
-面向中文玩家的纯前端末日生存决策卡牌 Roguelite：7 个灾变场景、每局 7 天、21 个结局与 42 张真实生存知识卡，进度存于本地。
+面向中文玩家的纯前端末日生存决策卡牌 Roguelite：7 个灾变场景、每局 7 天、5 项通用资源 + 1 项场景专属资源、21 个结局与 42 张真实生存知识卡，进度存于本地。
 
 ## 当前阶段重点
 
-引擎与页面骨架并行推进：RNG / 常量 / 牌组已就绪，当前实现选项结算与评分；后续内容 story 需把 42 张知识卡汇总进 `data/knowledge/index.ts`，UI 复用 `useProgress()` 与 `ScenarioCover`。
+引擎、reducer、进度纯函数与预渲染修复已就绪；先完成游戏页（HUD → 事件卡 → 结算），再补 7 个场景的真实内容、US-035 聚合与图鉴。内容字段以 `lib/types.ts` 为准：选项文案用 `resultText`，风险分支写进 `risk`，知识卡用 `content`。
 <!-- pm-managed:end -->

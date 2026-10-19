@@ -168,6 +168,14 @@ export interface RunState {
   finishedAt?: string;
 }
 
+/** 单个场景的完整内容：元数据、事件牌组、结局与知识卡。 */
+export interface ScenarioContent {
+  scenario: Scenario;
+  events: readonly GameEvent[];
+  endings: readonly Ending[];
+  knowledge: readonly KnowledgeCard[];
+}
+
 /** 单场景的累计进度。 */
 export interface ScenarioProgress {
   bestScore: number;
