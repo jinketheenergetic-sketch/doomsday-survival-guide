@@ -46,7 +46,7 @@ export function ScenarioCard({
         {!coverFailed ? (
           <Image
             src={scenario.cover}
-            alt=""
+            alt={`${scenario.title}场景封面`}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             onError={() => setCoverFailed(true)}
@@ -103,7 +103,7 @@ export function ScenarioCard({
               专属 · {scenario.specificResource.label}
             </span>
           </span>
-          <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-coral">
+          <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-coral-strong">
             进入
             <FontAwesomeIcon
               icon={faArrowRight}

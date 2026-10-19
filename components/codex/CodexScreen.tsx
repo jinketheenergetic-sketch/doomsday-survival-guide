@@ -118,7 +118,7 @@ function ScenarioChip({
     <span
       className={`inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-chip border px-2.5 text-xs font-semibold ${
         muted
-          ? "border-ink/10 bg-surface text-ink-soft/60"
+          ? "border-ink/10 bg-surface text-ink-soft"
           : "border-ink/15 bg-paper text-ink-soft"
       }`}
     >

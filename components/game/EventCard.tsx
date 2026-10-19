@@ -192,6 +192,7 @@ export function EventCard({
               <button
                 type="button"
                 disabled={disabled}
+                aria-keyshortcuts={`${index + 1} ${CHOICE_LETTERS[index]}`}
                 onClick={() => onSelect?.(choice)}
                 className="flex min-h-11 w-full items-start gap-3 rounded-button border-2 border-ink bg-surface p-3 text-left shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)] disabled:pointer-events-none disabled:opacity-55 sm:p-4"
               >
@@ -220,11 +221,23 @@ export function EventCard({
             </kbd>{" "}
             /{" "}
             <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
+              A
+            </kbd>
+            、
+            <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
               2
             </kbd>{" "}
             /{" "}
             <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
+              B
+            </kbd>
+            、
+            <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
               3
+            </kbd>{" "}
+            /{" "}
+            <kbd className="rounded border border-ink/20 bg-paper px-1.5 py-0.5 font-numeric text-ink">
+              C
             </kbd>{" "}
             选择
           </p>

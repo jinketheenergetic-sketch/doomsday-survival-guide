@@ -576,7 +576,7 @@ export function ResultScreen({
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Link
             href={`/play/${scenario.id}`}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-button border-2 border-ink bg-coral px-5 font-semibold text-paper shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-button border-2 border-ink bg-coral px-5 font-semibold text-ink shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)]"
           >
             <FontAwesomeIcon icon={faArrowRotateRight} aria-hidden />
             再来一局

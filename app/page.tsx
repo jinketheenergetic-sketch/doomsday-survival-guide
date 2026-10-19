@@ -83,6 +83,7 @@ export default function Home() {
                     </span>
                     <FontAwesomeIcon
                       icon={getIconByName(scenario.icon)}
+                      aria-hidden
                       className="h-7 w-7"
                     />
                   </div>

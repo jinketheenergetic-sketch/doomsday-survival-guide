@@ -10,7 +10,7 @@ export function SiteFooter() {
           href="https://unsplash.com"
           target="_blank"
           rel="noreferrer noopener"
-          className="font-semibold underline decoration-2 underline-offset-2 hover:text-ink"
+          className="inline-flex min-h-11 items-center px-1 align-middle font-semibold underline decoration-2 underline-offset-2 hover:text-ink"
         >
           Unsplash
         </a>
@@ -19,7 +19,7 @@ export function SiteFooter() {
           href="https://fontawesome.com"
           target="_blank"
           rel="noreferrer noopener"
-          className="font-semibold underline decoration-2 underline-offset-2 hover:text-ink"
+          className="inline-flex min-h-11 items-center px-1 align-middle font-semibold underline decoration-2 underline-offset-2 hover:text-ink"
         >
           Font Awesome Free
         </a>

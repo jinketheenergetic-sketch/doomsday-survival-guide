@@ -90,7 +90,7 @@ export function ScenarioRecord({ scenarioId }: { scenarioId: ScenarioId }) {
                 </span>
                 <span
                   className={`font-numeric text-lg font-bold leading-none ${
-                    unlocked ? "text-coral" : "text-ink/30"
+                    unlocked ? "text-coral-strong" : "text-ink/30"
                   }`}
                 >
                   {unlocked ? "已解锁" : "???"}

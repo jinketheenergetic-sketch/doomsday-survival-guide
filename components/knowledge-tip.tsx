@@ -68,7 +68,7 @@ export function KnowledgeTip() {
           </span>
         </span>
 
-        <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-coral">
+        <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-coral-strong">
           翻开手册
           <FontAwesomeIcon
             icon={faArrowRight}

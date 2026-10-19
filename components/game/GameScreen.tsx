@@ -179,7 +179,7 @@ function GameRoom({
     router.push(`/play/${run.scenarioId}/result`);
   }, [content.endings, dispatch, router, run]);
 
-  // 键盘 1 / 2 / 3 与点击选项等价；结果弹层打开或对局结束时不再响应。
+  // 键盘 1/2/3 与 A/B/C 均与点击选项等价；结果弹层打开或对局结束时不再响应。
   useEffect(() => {
     if (!run || run.status !== "playing" || pending || !currentEvent) {
       return;
@@ -190,8 +190,11 @@ function GameRoom({
         return;
       }
 
-      const index = ["1", "2", "3"].indexOf(event.key);
-      if (index === -1) return;
+      const key = event.key.toLowerCase();
+      const index = ["1", "2", "3"].indexOf(key);
+      const letterIndex = ["a", "b", "c"].indexOf(key);
+      const choiceIndex = index !== -1 ? index : letterIndex;
+      if (choiceIndex === -1) return;
 
       const target = event.target as HTMLElement | null;
       if (
@@ -203,7 +206,7 @@ function GameRoom({
         return;
       }
 
-      const choice = currentEvent?.choices[index];
+      const choice = currentEvent?.choices[choiceIndex];
       if (!choice) return;
 
       event.preventDefault();
@@ -250,7 +253,7 @@ function GameRoom({
             这一局已经结束。{" "}
             <Link
               href={`/play/${scenario.id}/result`}
-              className="text-teal underline underline-offset-4"
+              className="inline-flex min-h-11 items-center text-teal-strong underline underline-offset-4"
             >
               查看结算
             </Link>

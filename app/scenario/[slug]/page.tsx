@@ -182,7 +182,7 @@ export default async function ScenarioPage({ params }: ScenarioPageProps) {
           </Link>
           <Link
             href={`/play/${scenario.id}`}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-button border-2 border-ink bg-coral px-6 font-semibold text-paper shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-button border-2 border-ink bg-coral px-6 font-semibold text-ink shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)]"
           >
             <FontAwesomeIcon icon={faPlay} aria-hidden />
             开始求生

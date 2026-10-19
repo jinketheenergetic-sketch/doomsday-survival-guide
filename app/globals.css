@@ -13,8 +13,11 @@
   --coral: #ff6b57;
   --teal: #19b9a7;
   --sun: #ffc94d;
-  --danger: #e5484d;
-  --success: #2f9e5f;
+  /* 深一档的语义色：用于浅色底上的文字与聚焦环，保证 WCAG AA 对比度 */
+  --coral-strong: #b23a1a;
+  --teal-strong: #0f766e;
+  --danger: #b3261e;
+  --success: #1d6b3f;
 
   /* 圆角 */
   --radius-card: 28px;
@@ -107,7 +110,9 @@
   --color-paper: var(--paper);
   --color-surface: var(--surface);
   --color-coral: var(--coral);
+  --color-coral-strong: var(--coral-strong);
   --color-teal: var(--teal);
+  --color-teal-strong: var(--teal-strong);
   --color-sun: var(--sun);
   --color-danger: var(--danger);
   --color-success: var(--success);
@@ -132,6 +137,8 @@ body {
   font-family: var(--font-noto), system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.75;
+  /* 悬停位移与装饰形状不应在小屏撑出横向滚动；clip 不会创建滚动容器，sticky 仍生效 */
+  overflow-x: clip;
 }
 
 h1,
@@ -145,7 +152,7 @@ h6 {
 }
 
 :focus-visible {
-  outline: 3px solid var(--teal);
+  outline: 3px solid var(--teal-strong);
   outline-offset: 2px;
 }
 

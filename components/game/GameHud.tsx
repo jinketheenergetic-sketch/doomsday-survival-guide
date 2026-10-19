@@ -149,7 +149,7 @@ function DayDots({ day }: { day: number }) {
               value < day
                 ? "border-ink bg-sun text-ink"
                 : current
-                  ? "border-ink bg-coral text-paper"
+                  ? "border-ink bg-coral text-ink"
                   : "border-ink/20 bg-paper text-ink/35"
             }`}
           >
@@ -218,7 +218,7 @@ export function GameHud({
         <DayDots day={run.day} />
 
         {/* 资源变化播报；内容随最近一次结算更新。 */}
-        <p aria-live="polite" className="sr-only">
+        <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
           {announcement}
         </p>
 
@@ -305,7 +305,7 @@ export function GameHud({
               <button
                 type="button"
                 onClick={confirmExit}
-                className="inline-flex min-h-11 items-center justify-center rounded-button border-2 border-ink bg-coral px-4 font-semibold text-paper shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)]"
+                className="inline-flex min-h-11 items-center justify-center rounded-button border-2 border-ink bg-coral px-4 font-semibold text-ink shadow-button transition-transform duration-[var(--duration-fast)] ease-[var(--ease-cartoon)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_var(--ink)]"
               >
                 退出到简报
               </button>

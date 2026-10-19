@@ -42,7 +42,7 @@ export function ScenarioCover({
       {!coverFailed ? (
         <Image
           src={scenario.cover}
-          alt=""
+          alt={`${scenario.title}场景封面`}
           fill
           priority={priority}
           sizes="(min-width: 1024px) 1024px, 100vw"
