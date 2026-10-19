@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Baloo_2, Noto_Sans_SC, ZCOOL_KuaiLe } from "next/font/google";
 
+import { SettingsSync } from "@/components/settings-sync";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
       className={`${zcool.variable} ${notoSansSC.variable} ${baloo2.variable}`}
     >
       <body className="flex min-h-dvh flex-col antialiased">
+        <SettingsSync />
         <SiteHeader />
         {children}
         <SiteFooter />

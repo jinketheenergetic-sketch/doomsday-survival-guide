@@ -21,9 +21,10 @@
 - **场景封面统一复用 `components/scenario-cover.tsx`** — 渐变层 + 大图标永远垫底，`next/image` 的 `onError` 卸载图片；不要重写这套兜底（来自 [US-006]）
 - **图标名统一经 `lib/icons.ts` 的 `getIconByName()` 解析** — 新增图标名要在该文件登记，否则会回退成手册图标（来自 [US-005]）
 - **资源变化 chip 直接读 `ChoiceResolution.result.resourceDelta`** — 它是钳制后的实际差值，不要用选项声明的效果自行计算（来自 [US-008]）
-- **客户端组件里的 `usePathname()` 必须包在 `<Suspense>` 内** — cacheComponents 下否则构建报 `CLIENT_HOOK_DYNAMIC`；hook 拆到子组件、fallback 复用同一展示组件（来自 [US-038]）
+- **客户端组件里的 `usePathname()` / `useSearchParams()` 必须包在 `<Suspense>` 内** — cacheComponents 下否则构建报 `CLIENT_HOOK_DYNAMIC`；hook 拆到子组件、fallback 复用同一展示组件（来自 [US-038]/[US-013]）
 - **需要“只执行一次”的恢复 effect 用 `useRef` 记录阶段而非 `useState`** — 避免 `react-hooks/set-state-in-effect`（来自 [US-037]）
 - **资源名称/图标/颜色集中在 `components/game/resource-display.ts`** — 新增资源 chip 直接复用，不要各自维护 label/icon（来自 [US-010b]）
 - **`useSyncExternalStore` 的服务端快照用独立 `loading` 哨兵** — 区分「未水合」与「确实无数据」，否则预渲染阶段会误跳转（来自 [US-012]）
 - **结算页「结局 x/3」的 x = 写回后该场景已解锁结局数** — 不是本次结局在 3 个槽位中的序号（来自 [US-012]）
 - **新增 FontAwesome 图标名先用 `node -e "require('@fortawesome/free-solid-svg-icons')"` 确认导出存在** — 再登记到 `lib/icons.ts`，否则 tsc 报不存在的导出（来自 [US-023]）
+- **URL 状态筛选用 `<Link href="?k=v">` 而非 `router.replace`** — URL 持久化天然成立，测试也不必 mock `useRouter`（来自 [US-013]）

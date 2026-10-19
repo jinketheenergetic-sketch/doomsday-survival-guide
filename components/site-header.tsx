@@ -3,6 +3,7 @@
 import { faCompass } from "@fortawesome/free-regular-svg-icons";
 import {
   faBookOpen,
+  faGear,
   faSkull,
   faVolumeHigh,
   faVolumeXmark,
@@ -10,29 +11,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Suspense, useSyncExternalStore } from "react";
+import { Suspense, useState } from "react";
 
-import { storageAdapter } from "@/lib/storage";
-
-const soundListeners = new Set<() => void>();
-
-/** 设置存放在 localStorage，用外部存储订阅让开关在 SSR 下也能安全渲染。 */
-function subscribeSound(listener: () => void): () => void {
-  soundListeners.add(listener);
-  window.addEventListener("storage", listener);
-  return () => {
-    soundListeners.delete(listener);
-    window.removeEventListener("storage", listener);
-  };
-}
-
-function getSoundSnapshot(): boolean {
-  return storageAdapter.getSettings().soundEnabled;
-}
-
-function getServerSoundSnapshot(): boolean {
-  return false;
-}
+import { SettingsDialog } from "@/components/settings-dialog";
+import { updateSettings, useSettings } from "@/lib/settings-store";
+import { playSound } from "@/lib/sound";
 
 function isScenariosRoute(pathname: string): boolean {
   return (
@@ -99,23 +82,23 @@ function HeaderNavFallback() {
 }
 
 export function SiteHeader() {
-  const soundEnabled = useSyncExternalStore(
-    subscribeSound,
-    getSoundSnapshot,
-    getServerSoundSnapshot,
-  );
+  const { soundEnabled } = useSettings();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   function toggleSound() {
-    const settings = storageAdapter.getSettings();
-    storageAdapter.saveSettings({
-      ...settings,
-      soundEnabled: !settings.soundEnabled,
-    });
-    for (const listener of soundListeners) listener();
+    const next = !soundEnabled;
+    updateSettings({ soundEnabled: next });
+    if (next) playSound("click");
+  }
+
+  function openSettings() {
+    playSound("click");
+    setSettingsOpen(true);
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-ink/10 bg-paper/95 backdrop-blur">
+    <>
+      <header className="sticky top-0 z-40 border-b-2 border-ink/10 bg-paper/95 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:gap-4 sm:px-6">
         <Link
           href="/"
@@ -152,8 +135,24 @@ export function SiteHeader() {
               aria-hidden
             />
           </button>
+
+          <button
+            type="button"
+            onClick={openSettings}
+            aria-label="打开设置"
+            aria-haspopup="dialog"
+            aria-expanded={settingsOpen}
+            title="设置"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-chip border-2 border-ink bg-surface text-ink shadow-button transition-colors duration-[var(--duration-fast)] hover:bg-paper active:shadow-none"
+          >
+            <FontAwesomeIcon icon={faGear} aria-hidden />
+          </button>
         </div>
       </div>
-    </header>
+
+      </header>
+
+      {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
+    </>
   );
 }

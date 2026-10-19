@@ -14,6 +14,7 @@ import { buildRun } from "@/lib/engine/deck";
 import { createChoiceRng, resolveChoice } from "@/lib/engine/resolve";
 import { evaluateRun } from "@/lib/engine/score";
 import { unlockKnowledge } from "@/lib/progress";
+import { playSound } from "@/lib/sound";
 import { storageAdapter } from "@/lib/storage";
 import type {
   Choice,
@@ -122,6 +123,17 @@ function GameRoom({
         newKnowledgeId,
         at: new Date().toISOString(),
       });
+
+      // 解锁优先于选择结果音；音效关闭时 playSound 自己静默返回。
+      if (newKnowledgeId) {
+        playSound("unlock");
+      } else if (resolution.result.quality === "good") {
+        playSound("good");
+      } else if (resolution.result.quality === "bad") {
+        playSound("bad");
+      } else {
+        playSound("click");
+      }
     },
     [continuing, dispatch, middleEventCount, pending, run],
   );
@@ -129,6 +141,7 @@ function GameRoom({
   const handleContinue = useCallback(() => {
     if (!run) return;
 
+    playSound("click");
     const final = run.status === "dead" || run.day >= RUN_DAYS;
     if (!final) {
       dispatch({ type: "advance" });

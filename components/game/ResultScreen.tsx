@@ -28,6 +28,7 @@ import { COMMON_RESOURCES } from "@/components/game/resource-display";
 import { ScenarioCover } from "@/components/scenario-cover";
 import { getKnowledgeCard } from "@/data/knowledge";
 import { getIconByName } from "@/lib/icons";
+import { playSound } from "@/lib/sound";
 import { storageAdapter } from "@/lib/storage";
 import type {
   ChoiceResult,
@@ -390,6 +391,17 @@ export function ResultScreen({
   // 结果写回进度只做一次；存储清理与结局计数都在这里完成。
   useEffect(() => {
     if (result) applyResultOnce(result);
+  }, [result]);
+
+  // 结局揭晓播一次低沉的上行音，星级点亮稍后补一声清脆提示。
+  useEffect(() => {
+    if (!result) return;
+
+    playSound("ending");
+    if (result.stars <= 0) return;
+
+    const timer = window.setTimeout(() => playSound("star"), 420);
+    return () => window.clearTimeout(timer);
   }, [result]);
 
   if (!result) {

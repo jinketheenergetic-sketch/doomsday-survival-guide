@@ -29,7 +29,7 @@
 - **`advance` 会清空 `lastResult`** — 结果弹层直接读 `state.lastResult`，不要另存一份 pending 副本（来自 [US-011]）
 - **结算写回后清空 `activeRun` 与 `lastResult`** — 用模块级缓存让当前页继续渲染；保留 `lastResult` 会让刷新重复计入 `totalRuns`（来自 [US-012]）
 - **同一标签页内 `saveProgress` 不触发 `storage` 事件** — 写回进度后需显式通知 `useProgress` 的订阅者（来自 [US-012]）
-- **内容未就绪时统一用 `createSkeletonEvents` 兜底** — 游戏页与结算页共用同一份，保证历史 `eventId` 可回查（来自 [US-010a]/[US-012]）
+- **`createSkeletonEvents` 兜底自 US-035 后已不可达** — 7 个场景均有真实内容，不要再扩展该分支；清理单独开 story，不塞进内容/打磨 story（来自 [US-010a]/[US-035]）
 - **`GameEvent.choices` 是 `readonly [Choice, Choice, Choice]`** — 标注为 `readonly GameEvent[]` 时 3 元素字面量自动按元组校验，无需 `as const`（来自 [US-014]）
 - **风险选项也要写 `resultText`** — 结算走 `risk.successText`/`failureText`，但内容校验要求每个选项都有该字段（来自 [US-014]）
 - **7 张中段里至少 4 张带风险** — 才能保证任意 5 张子集仍含 2 个风险选项（US-033 的牌组约束）（来自 [US-014]）
@@ -39,3 +39,6 @@
 - **知识卡 id 由本场景 `events.ts` 先行定义（格式 `<scenarioId>-<slug>`），内容 story 反向建卡** — 测试同时校验引用可解析与每张卡至少被引用一次，防拼写漂移与死卡（来自 [US-015]/[US-019]）
 - **结局文案回扣同场景 `events.ts` 终局 bad 选项的意象** — 两段式内容 story 之间互相呼应，比重新发明细节更连贯（来自 [US-017]/[US-019]）
 - **一张知识卡可被多个事件复用** — 建卡内容要覆盖全部引用语境（如正午高温既在加油站也在赶路），不要只对着第一个事件写（来自 [US-024]）
+- **`data/scenarios/index.ts` 同时承担元数据注册与内容聚合** — 新增场景必须补 `contentByScenarioId` 条目；`Record<ScenarioId, ...>` 只保证键齐全，不保证导入对应（来自 [US-035]）
+- **进度统计一律用「注册表 id ∩ 已解锁 id」** — 存档可能含旧/未知 id，直接取 `unlockedKnowledgeIds.length` 会虚高（图鉴 x/42 即此口径）（来自 [US-013]）
+- **`KnowledgeCard` 没有难度字段** — 卡片难度星取所属场景的 `threatLevel`（1–5）；要卡片级难度需先扩展类型并回填 42 张卡（来自 [US-013]）
